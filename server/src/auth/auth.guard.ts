@@ -7,7 +7,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from 'src/public.decorator';
+import { IS_PUBLIC_KEY } from './public.decorator';
 
 type AuthorizedRequest = Request & { headers: { authorization: string } };
 
