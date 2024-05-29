@@ -1,12 +1,12 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import reportWebVitals from "./reportWebVitals"
-import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { RouterProvider, createBrowserRouter, Navigate } from "react-router-dom"
+import { ConfigProvider } from "antd"
 import ErrorPage from "./pages/error"
 import Login from "./pages/login"
 import Dashboard from "./pages/dashboard"
+import Product from "./pages/product"
 import MainLayout from "./layouts/mainLayout"
-import { ConfigProvider } from "antd"
 import "./index.css"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
@@ -17,9 +17,25 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <div>index</div> },
+      { index: true, element: <Navigate to={"/one"} /> },
       {
-        path: "/dashboard",
+        path: "/one",
+        element: <Product />,
+      },
+      {
+        path: "/two",
+        element: <Dashboard />,
+      },
+      {
+        path: "/three",
+        element: <Dashboard />,
+      },
+      {
+        path: "/four",
+        element: <Dashboard />,
+      },
+      {
+        path: "/five",
         element: <Dashboard />,
       },
     ],
@@ -38,4 +54,4 @@ root.render(
   </React.StrictMode>
 )
 
-reportWebVitals(console.log)
+// reportWebVitals(console.log)

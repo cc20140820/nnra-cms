@@ -1,76 +1,106 @@
-import React from "react"
-import { Outlet } from "react-router-dom"
-import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons"
+import React, { useEffect, useState } from "react"
+import { Outlet, useNavigate, useLocation } from "react-router-dom"
+import { AppstoreOutlined, MailOutlined } from "@ant-design/icons"
 import type { MenuProps } from "antd"
-import { Layout, Menu, theme } from "antd"
+import { Layout, Menu, theme, Typography } from "antd"
 
+const { Title } = Typography
 const { Header, Content, Sider } = Layout
+type MenuItem = Required<MenuProps>["items"][number] & {
+  children: { key: string; label: string }[]
+}
 
-const items1: MenuProps["items"] = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}))
+const menus: MenuItem[] = [
+  {
+    key: "sub1",
+    label: "Navigation One",
+    icon: <MailOutlined />,
+    children: [
+      { key: "one", label: "Dashboard" },
+      { key: "two", label: "Option 2" },
+      { key: "three", label: "Option 3" },
+    ],
+  },
+  {
+    key: "sub2",
+    label: "Navigation Two",
+    icon: <AppstoreOutlined />,
+    children: [
+      { key: "four", label: "Option 4" },
+      { key: "five", label: "Option 5" },
+    ],
+  },
+]
 
-const items2: MenuProps["items"] = [
-  UserOutlined,
-  LaptopOutlined,
-  NotificationOutlined,
-].map((icon, index) => {
-  const key = String(index + 1)
-
-  return {
-    key: `sub${key}`,
-    icon: React.createElement(icon),
-    label: `subnav ${key}`,
-
-    children: new Array(4).fill(null).map((_, j) => {
-      const subKey = index * 4 + j + 1
-      return {
-        key: subKey,
-        label: `option${subKey}`,
-      }
-    }),
-  }
-})
-
-const Dashboard: React.FC = () => {
+const MainLayout: React.FC = () => {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer },
   } = theme.useToken()
+  const navigate = useNavigate()
+  let location = useLocation()
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([])
+  const [openKeys, setOpenKeys] = useState<string[]>([])
+  const [pageName, setPageName] = useState("")
+
+  const handleMenuClick: MenuProps["onClick"] = (e) => {
+    navigate(`/${e.key}`)
+  }
+
+  useEffect(() => {
+    const key = location.pathname.replace("/", "")
+    const parentKey = menus.find(
+      (menu) => menu?.children.findIndex((child) => child.key === key) > -1
+    )?.key as string
+    const pageLabel =
+      menus
+        .find((menu) => menu.key === parentKey)
+        ?.children.find((sub) => sub.key === key)?.label || ""
+    setSelectedKeys([key])
+    setOpenKeys([parentKey])
+    setPageName(pageLabel)
+  }, [location])
 
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100%" }}>
       <Header style={{ display: "flex", alignItems: "center" }}>
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["2"]}
-          items={items1}
-          style={{ flex: 1, minWidth: 0 }}
-        />
+        <div
+          className="demo-logo"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            style={{ height: 50 }}
+            src={process.env.PUBLIC_URL + "/lion.svg"}
+            alt="logo"
+          />
+        </div>
       </Header>
       <Layout>
         <Sider width={200} style={{ background: colorBgContainer }}>
           <Menu
             mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
+            selectedKeys={selectedKeys}
+            onSelect={({ selectedKeys }: Record<string, any>) =>
+              setSelectedKeys(selectedKeys)
+            }
+            openKeys={openKeys}
+            onOpenChange={(_openKeys: string[]) => setOpenKeys(_openKeys)}
             style={{ height: "100%", borderRight: 0 }}
-            items={items2}
+            items={menus}
+            onClick={handleMenuClick}
           />
         </Sider>
-        <Layout style={{ padding: "24px" }}>
+        <Layout style={{ padding: "0 24px 24px" }}>
+          <Title level={3}>{pageName}</Title>
           <Content
             style={{
-              padding: 24,
+              // padding: 24,
               margin: 0,
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
+              // background: colorBgContainer,
+              // borderRadius: borderRadiusLG,
             }}
           >
             <Outlet />
@@ -81,4 +111,4 @@ const Dashboard: React.FC = () => {
   )
 }
 
-export default Dashboard
+export default MainLayout
