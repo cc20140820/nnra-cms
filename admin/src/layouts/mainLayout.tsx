@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
-import { AppstoreOutlined, MailOutlined } from "@ant-design/icons"
+import { AppstoreOutlined, MailOutlined, UserOutlined } from "@ant-design/icons"
 import type { MenuProps } from "antd"
-import { Layout, Menu, theme, Typography } from "antd"
+import { Button, Dropdown, Layout, Menu, theme, Typography } from "antd"
+import styles from "./mainLayout.module.css"
 
 const { Title } = Typography
 const { Header, Content, Sider } = Layout
@@ -42,6 +43,13 @@ const MainLayout: React.FC = () => {
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [pageName, setPageName] = useState("")
 
+  const userOptions: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <a onClick={() => navigate("/login")}>Logout</a>,
+    },
+  ]
+
   const handleMenuClick: MenuProps["onClick"] = (e) => {
     navigate(`/${e.key}`)
   }
@@ -62,9 +70,14 @@ const MainLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: "100%" }}>
-      <Header style={{ display: "flex", alignItems: "center" }}>
+      <Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <div
-          className="demo-logo"
           style={{
             display: "flex",
             alignItems: "center",
@@ -72,10 +85,17 @@ const MainLayout: React.FC = () => {
           }}
         >
           <img
-            style={{ height: 50 }}
+            style={{ height: 46 }}
             src={process.env.PUBLIC_URL + "/lion.svg"}
             alt="logo"
           />
+        </div>
+        <div>
+          <Dropdown menu={{ items: userOptions }} placement="bottomRight">
+            <Button type="primary" icon={<UserOutlined />}>
+              User
+            </Button>
+          </Dropdown>
         </div>
       </Header>
       <Layout>

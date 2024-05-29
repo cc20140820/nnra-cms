@@ -1,0 +1,13 @@
+.loginWrap {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 188px;
+  box-sizing: border-box;
+  background: url("@/assets/loginBg.png") no-repeat;
+
+  .logo {
+    height: 36px;
+  }
+}
