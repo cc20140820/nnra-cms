@@ -1,0 +1,5 @@
+.siderMenu {
+  height: calc(100% - 65px);
+  inset-block-start: 65px;
+  position: fixed;
+}

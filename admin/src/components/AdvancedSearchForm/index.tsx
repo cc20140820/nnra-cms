@@ -16,8 +16,7 @@ const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
 
   const formStyle: React.CSSProperties = {
     maxWidth: "none",
-    // background: token.colorFillAlter,
-    background: "#ffffff",
+    background: token.colorBgBase,
     borderRadius: token.borderRadiusLG,
     padding: 24,
   }

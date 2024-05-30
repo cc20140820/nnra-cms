@@ -1,8 +1,23 @@
 import React, { useEffect, useState } from "react"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
-import { AppstoreOutlined, MailOutlined, UserOutlined } from "@ant-design/icons"
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  UserOutlined,
+  SunOutlined,
+  MoonOutlined,
+} from "@ant-design/icons"
 import type { MenuProps } from "antd"
-import { Button, Dropdown, Layout, Menu, theme, Typography } from "antd"
+import {
+  Button,
+  Dropdown,
+  Layout,
+  Menu,
+  theme,
+  Typography,
+  Space,
+  ConfigProvider,
+} from "antd"
 import styles from "./mainLayout.module.css"
 
 const { Title } = Typography
@@ -35,13 +50,14 @@ const menus: MenuItem[] = [
 
 const MainLayout: React.FC = () => {
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, colorBgBase },
   } = theme.useToken()
   const navigate = useNavigate()
   let location = useLocation()
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [pageName, setPageName] = useState("")
+  const [isDark, setIsDark] = useState(false)
 
   const userOptions: MenuProps["items"] = [
     {
@@ -52,6 +68,10 @@ const MainLayout: React.FC = () => {
 
   const handleMenuClick: MenuProps["onClick"] = (e) => {
     navigate(`/${e.key}`)
+  }
+
+  const toggleTheme = () => {
+    setIsDark((prev) => !prev)
   }
 
   useEffect(() => {
@@ -69,37 +89,29 @@ const MainLayout: React.FC = () => {
   }, [location])
 
   return (
-    <Layout style={{ minHeight: "100%" }}>
-      <Header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <div
+    <ConfigProvider
+      theme={{
+        token: {},
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        components: {
+          Layout: {
+            // headerBg: "#ffffff",
+            headerBg: "transparent",
+            bodyBg: "transparent",
+          },
+        },
+      }}
+    >
+      <Layout style={{ minHeight: "100%" }}>
+        <Sider
+          width={240}
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            background: colorBgContainer,
+            position: "fixed",
+            overflow: "auto",
           }}
+          className={styles.siderMenu}
         >
-          <img
-            style={{ height: 46 }}
-            src={process.env.PUBLIC_URL + "/lion.svg"}
-            alt="logo"
-          />
-        </div>
-        <div>
-          <Dropdown menu={{ items: userOptions }} placement="bottomRight">
-            <Button type="primary" icon={<UserOutlined />}>
-              User
-            </Button>
-          </Dropdown>
-        </div>
-      </Header>
-      <Layout>
-        <Sider width={200} style={{ background: colorBgContainer }}>
           <Menu
             mode="inline"
             selectedKeys={selectedKeys}
@@ -113,21 +125,73 @@ const MainLayout: React.FC = () => {
             onClick={handleMenuClick}
           />
         </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
-          <Title level={3}>{pageName}</Title>
-          <Content
+
+        <Layout style={{ marginLeft: 240 }}>
+          <Header
             style={{
-              // padding: 24,
-              margin: 0,
-              // background: colorBgContainer,
-              // borderRadius: borderRadiusLG,
+              // height: layout?.header?.heightLayoutHeader || 56,
+              // lineHeight: `${
+              //   token.layout?.header?.heightLayoutHeader || 56
+              // }px`,
+              backgroundColor: "transparent",
+              zIndex: 0,
+            }}
+          />
+          <Header
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              position: "fixed",
+              width: "100%",
+              zIndex: 10,
+              insetBlockStart: 0,
+              insetInlineEnd: 0,
+              borderBlockEnd: "1px solid rgba(5,5,5,0.06)",
+              backdropFilter: "blur(8px)",
             }}
           >
-            <Outlet />
-          </Content>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                style={{ height: 46 }}
+                src={process.env.PUBLIC_URL + "/lion.svg"}
+                alt="logo"
+              />
+            </div>
+            <Space direction="horizontal">
+              <Button
+                icon={isDark ? <MoonOutlined /> : <SunOutlined />}
+                shape="default"
+                onClick={toggleTheme}
+              />
+              <Dropdown menu={{ items: userOptions }} placement="bottomRight">
+                <Button icon={<UserOutlined />}>User</Button>
+              </Dropdown>
+            </Space>
+          </Header>
+
+          <Layout style={{ padding: "0 24px 24px" }}>
+            <Title level={3}>{pageName}</Title>
+            <Content
+              style={{
+                // padding: 24,
+                margin: 0,
+                // background: colorBgContainer,
+                // borderRadius: borderRadiusLG,
+              }}
+            >
+              <Outlet />
+            </Content>
+          </Layout>
         </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   )
 }
 
