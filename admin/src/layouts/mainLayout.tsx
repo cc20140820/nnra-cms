@@ -48,16 +48,19 @@ const menus: MenuItem[] = [
   },
 ]
 
+const SIDER_WIDTH = 240
+const HEADER_HEIGHT = 65
+
 const MainLayout: React.FC = () => {
-  const {
-    token: { colorBgContainer, colorBgBase },
-  } = theme.useToken()
+  const { token } = theme.useToken()
+  const { colorBgContainer } = token
+
   const navigate = useNavigate()
   let location = useLocation()
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [pageName, setPageName] = useState("")
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(false) // 这里要换成全局状态管理 zustand
 
   const userOptions: MenuProps["items"] = [
     {
@@ -88,6 +91,9 @@ const MainLayout: React.FC = () => {
     setPageName(pageLabel)
   }, [location])
 
+  // console.log("headerHeightheaderHeight", headerHeight)
+  console.log("token", token)
+
   return (
     <ConfigProvider
       theme={{
@@ -95,20 +101,19 @@ const MainLayout: React.FC = () => {
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
         components: {
           Layout: {
-            // headerBg: "#ffffff",
-            headerBg: "transparent",
-            bodyBg: "transparent",
+            headerBg: "rgba(255, 255, 255, 0.6)",
+            headerHeight: HEADER_HEIGHT,
           },
         },
       }}
     >
       <Layout style={{ minHeight: "100%" }}>
         <Sider
-          width={240}
+          width={SIDER_WIDTH}
           style={{
             background: colorBgContainer,
-            position: "fixed",
-            overflow: "auto",
+            height: `calc(100% - ${HEADER_HEIGHT}px)`,
+            insetBlockStart: HEADER_HEIGHT,
           }}
           className={styles.siderMenu}
         >
@@ -125,39 +130,15 @@ const MainLayout: React.FC = () => {
             onClick={handleMenuClick}
           />
         </Sider>
-
-        <Layout style={{ marginLeft: 240 }}>
+        <Layout style={{ marginInlineStart: SIDER_WIDTH }}>
           <Header
             style={{
-              // height: layout?.header?.heightLayoutHeader || 56,
-              // lineHeight: `${
-              //   token.layout?.header?.heightLayoutHeader || 56
-              // }px`,
-              backgroundColor: "transparent",
               zIndex: 0,
+              backgroundColor: "transparent",
             }}
           />
-          <Header
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              position: "fixed",
-              width: "100%",
-              zIndex: 10,
-              insetBlockStart: 0,
-              insetInlineEnd: 0,
-              borderBlockEnd: "1px solid rgba(5,5,5,0.06)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+          <Header className={styles?.topHeader}>
+            <div className={styles.flexCenterWrap}>
               <img
                 style={{ height: 46 }}
                 src={process.env.PUBLIC_URL + "/lion.svg"}
@@ -175,17 +156,9 @@ const MainLayout: React.FC = () => {
               </Dropdown>
             </Space>
           </Header>
-
-          <Layout style={{ padding: "0 24px 24px" }}>
+          <Layout className={styles.layoutWrap}>
             <Title level={3}>{pageName}</Title>
-            <Content
-              style={{
-                // padding: 24,
-                margin: 0,
-                // background: colorBgContainer,
-                // borderRadius: borderRadiusLG,
-              }}
-            >
+            <Content>
               <Outlet />
             </Content>
           </Layout>

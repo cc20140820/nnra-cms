@@ -16,6 +16,9 @@ const Product: React.FC = () => {
       <Card>
         <AdvancedTable />
       </Card>
+      <Card>
+        <AdvancedTable />
+      </Card>
     </Space>
   )
 }

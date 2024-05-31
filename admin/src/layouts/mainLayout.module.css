@@ -1,5 +1,27 @@
 .siderMenu {
-  height: calc(100% - 65px);
-  inset-block-start: 65px;
+  position: fixed !important;
+  overflow: auto;
+}
+
+.topHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: fixed;
+  width: 100%;
+  z-index: 10;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+  backdrop-filter: blur(8px);
+}
+
+.flexCenterWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layoutWrap {
+  padding: 0 24px 24px;
 }

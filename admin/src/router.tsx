@@ -5,6 +5,8 @@ import Login from "./pages/login"
 import Dashboard from "./pages/dashboard"
 import Product from "./pages/product"
 
+// TODO: lazyload
+
 const router = createBrowserRouter([
   {
     path: "/",
