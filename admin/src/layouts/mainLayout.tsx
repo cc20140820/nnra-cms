@@ -8,7 +8,16 @@ import {
   MoonOutlined,
 } from "@ant-design/icons"
 import type { MenuProps } from "antd"
-import { Button, Dropdown, Layout, Menu, theme, Typography, Space } from "antd"
+import {
+  Button,
+  Dropdown,
+  Layout,
+  Menu,
+  theme,
+  Typography,
+  Space,
+  ConfigProvider,
+} from "antd"
 import { useAdminStore } from "@/store"
 import styles from "./mainLayout.module.css"
 
@@ -41,10 +50,11 @@ const menus: MenuItem[] = [
 ]
 
 const SIDER_WIDTH = 240
+const HEADER_HEIGHT = 64
 
 const MainLayout: React.FC = () => {
   const {
-    token: { colorBgContainer, Layout: { headerHeight } = {} },
+    token: { colorBgContainer },
   } = theme.useToken()
 
   const navigate = useNavigate()
@@ -81,14 +91,16 @@ const MainLayout: React.FC = () => {
     setPageName(pageLabel)
   }, [location])
 
+  console.log("colorBgContainer", colorBgContainer)
+
   return (
     <Layout style={{ minHeight: "100%" }}>
       <Sider
         width={SIDER_WIDTH}
         style={{
           background: colorBgContainer,
-          height: `calc(100% - ${headerHeight ?? 64}px)`,
-          insetBlockStart: headerHeight ?? 64,
+          height: `calc(100% - ${HEADER_HEIGHT}px)`,
+          insetBlockStart: HEADER_HEIGHT,
         }}
         className={styles.siderMenu}
       >
@@ -142,4 +154,24 @@ const MainLayout: React.FC = () => {
   )
 }
 
-export default MainLayout
+const EnhancedMainLayout: React.FC = () => {
+  const isDark = useAdminStore((state) => state.isDark)
+  return (
+    <ConfigProvider
+      theme={{
+        token: {},
+        algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        components: {
+          Layout: {
+            headerBg: "rgba(255, 255, 255, 0.6)",
+            headerHeight: HEADER_HEIGHT,
+          },
+        },
+      }}
+    >
+      <MainLayout />
+    </ConfigProvider>
+  )
+}
+
+export default EnhancedMainLayout
