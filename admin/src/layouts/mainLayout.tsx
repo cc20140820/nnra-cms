@@ -33,7 +33,7 @@ const menus: MenuItem[] = [
     label: "Navigation One",
     icon: <MailOutlined />,
     children: [
-      { key: "one", label: "Dashboard" },
+      { key: "article", label: "Article" },
       { key: "two", label: "Option 2" },
       { key: "three", label: "Option 3" },
     ],
@@ -90,8 +90,6 @@ const MainLayout: React.FC = () => {
     setOpenKeys([parentKey])
     setPageName(pageLabel)
   }, [location])
-
-  console.log("colorBgContainer", colorBgContainer)
 
   return (
     <Layout style={{ minHeight: "100%" }}>

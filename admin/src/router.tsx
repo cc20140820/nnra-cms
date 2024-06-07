@@ -3,9 +3,7 @@ import MainLayout from "./layouts/mainLayout"
 import ErrorPage from "./pages/error"
 import Login from "./pages/login"
 import Dashboard from "./pages/dashboard"
-import Product from "./pages/product"
-
-// TODO: lazyload
+import Article from "./pages/article"
 
 const router = createBrowserRouter([
   {
@@ -13,10 +11,10 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Navigate to={"/one"} /> },
+      { index: true, element: <Navigate to={"/article"} /> },
       {
-        path: "/one",
-        element: <Product />,
+        path: "/article",
+        element: <Article />,
       },
       {
         path: "/two",

@@ -1,15 +1,12 @@
 import React, { useState } from "react"
 import { DownOutlined } from "@ant-design/icons"
 import { Button, Col, Form, Input, Row, Select, Space, theme } from "antd"
+import { AdvancedSearchFormProps, FormItemType } from "./type"
 
 const { Option } = Select
 
-type AdvancedSearchFormProps = {
-  onSearch?: (values: Record<string, any>) => void
-}
-
 const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
-  const { onSearch } = props
+  const { items, onSearch } = props
   const { token } = theme.useToken()
   const [form] = Form.useForm()
   const [expand, setExpand] = useState(false)
@@ -21,47 +18,27 @@ const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
     padding: 24,
   }
 
-  const getFields = () => {
-    const count = expand ? 10 : 6
-    const children = []
-    for (let i = 0; i < count; i++) {
-      children.push(
-        <Col span={8} key={i}>
-          {i % 3 !== 1 ? (
-            <Form.Item
-              name={`field-${i}`}
-              label={`Field ${i}`}
-              rules={[
-                {
-                  // required: true,
-                  message: "Input something!",
-                },
-              ]}
-            >
-              <Input placeholder="placeholder" />
+  const renderItems = (items: FormItemType[]) => {
+    return (
+      <>
+        {items.map((item, index) => (
+          <Col key={index} span={6}>
+            <Form.Item name={item.name} label={item.label}>
+              {item.type === "input" && <Input placeholder="placeholder" />}
+              {item.type === "select" && (
+                <Select>
+                  {(item.options || []).map((op, i) => (
+                    <Option key={i} value={op.value}>
+                      {op.label}
+                    </Option>
+                  ))}
+                </Select>
+              )}
             </Form.Item>
-          ) : (
-            <Form.Item
-              name={`field-${i}`}
-              label={`Field ${i}`}
-              rules={[
-                {
-                  // required: true,
-                  message: "Select something!",
-                },
-              ]}
-              initialValue="1"
-            >
-              <Select>
-                <Option value="1">111</Option>
-                <Option value="2">222</Option>
-              </Select>
-            </Form.Item>
-          )}
-        </Col>
-      )
-    }
-    return children
+          </Col>
+        ))}
+      </>
+    )
   }
 
   const onFinish = (values: any) => {
@@ -76,7 +53,7 @@ const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
       style={formStyle}
       onFinish={onFinish}
     >
-      <Row gutter={24}>{getFields()}</Row>
+      <Row gutter={24}>{renderItems(items)}</Row>
       <div style={{ textAlign: "right" }}>
         <Space size="small">
           <Button type="primary" htmlType="submit">
