@@ -19,29 +19,46 @@ const Article: React.FC = () => {
   const { data, loading, run } = useRequest(api.getArticles)
 
   const handleSearch = async (values: Record<string, any>) => {
+    values.created_at = [
+      dayjs(values.created_at[0]).format("YYYY-MM-DD"),
+      dayjs(values.created_at[1]).format("YYYY-MM-DD"),
+    ]
     run(values)
   }
 
   const formItems = [
-    { type: FormTypeEnum.input, name: "author", label: "Author" },
-    { type: FormTypeEnum.input, name: "title", label: "Title" },
-
+    { type: FormTypeEnum.Input, name: "author", label: "Author" },
+    { type: FormTypeEnum.Input, name: "title", label: "Title" },
     {
-      type: FormTypeEnum.select,
-      name: "kind",
-      label: "KIND",
+      type: FormTypeEnum.Select,
+      name: "category",
+      label: "Category",
       options: [
-        { label: "op1", value: 1 },
-        { label: "op2", value: 2 },
+        { label: "category1", value: 1 },
+        { label: "category2", value: 2 },
+        { label: "category3", value: 3 },
       ],
+    },
+    {
+      type: FormTypeEnum.MultipleSelect,
+      name: "tags",
+      label: "Tags",
+      options: [
+        { label: "tag1", value: 1 },
+        { label: "tag2", value: 2 },
+        { label: "tag3", value: 3 },
+        { label: "tag4", value: 4 },
+        { label: "tag5", value: 5 },
+      ],
+    },
+    {
+      type: FormTypeEnum.RangePicker,
+      name: "created_at",
+      label: "Created",
     },
   ]
 
   const columns: TableProps<DataType>["columns"] = [
-    {
-      title: "UID",
-      dataIndex: "uid",
-    },
     {
       title: "Author",
       dataIndex: "author",
@@ -49,6 +66,10 @@ const Article: React.FC = () => {
     {
       title: "Title",
       dataIndex: "title",
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
     },
     {
       title: "Tags",

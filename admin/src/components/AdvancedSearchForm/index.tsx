@@ -1,9 +1,21 @@
 import React, { useState } from "react"
 import { DownOutlined } from "@ant-design/icons"
-import { Button, Col, Form, Input, Row, Select, Space, theme } from "antd"
-import { AdvancedSearchFormProps, FormItemType } from "./type"
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Space,
+  theme,
+  DatePicker,
+  TimeRangePickerProps,
+} from "antd"
+import { AdvancedSearchFormProps, FormItemType, FormTypeEnum } from "./type"
+import dayjs from "dayjs"
 
-const { Option } = Select
+const { RangePicker } = DatePicker
 
 const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
   const { items, onSearch } = props
@@ -18,25 +30,42 @@ const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
     padding: 24,
   }
 
+  const rangePresets: TimeRangePickerProps["presets"] = [
+    { label: "Last 7 Days", value: [dayjs().add(-7, "d"), dayjs()] },
+    { label: "Last 14 Days", value: [dayjs().add(-14, "d"), dayjs()] },
+    { label: "Last 30 Days", value: [dayjs().add(-30, "d"), dayjs()] },
+  ]
+
   const renderItems = (items: FormItemType[]) => {
     return (
       <>
-        {items.map((item, index) => (
-          <Col key={index} span={6}>
-            <Form.Item name={item.name} label={item.label}>
-              {item.type === "input" && <Input placeholder="placeholder" />}
-              {item.type === "select" && (
-                <Select>
-                  {(item.options || []).map((op, i) => (
-                    <Option key={i} value={op.value}>
-                      {op.label}
-                    </Option>
-                  ))}
-                </Select>
-              )}
-            </Form.Item>
-          </Col>
-        ))}
+        {items
+          .filter((_, index) => (expand ? true : index < 6))
+          .map((item, index) => (
+            <Col key={index} span={8}>
+              <Form.Item name={item.name} label={item.label}>
+                {item.type === FormTypeEnum.Input && <Input />}
+                {item.type === FormTypeEnum.Select && (
+                  <Select allowClear options={item.options || []} />
+                )}
+                {item.type === FormTypeEnum.MultipleSelect && (
+                  <Select
+                    mode="multiple"
+                    showSearch
+                    allowClear
+                    options={item.options || []}
+                  />
+                )}
+                {item.type === FormTypeEnum.RangePicker && (
+                  <RangePicker
+                    style={{ width: "100%" }}
+                    format={"YYYY-MM-DD"}
+                    presets={rangePresets}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          ))}
       </>
     )
   }
@@ -66,15 +95,17 @@ const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
           >
             Clear
           </Button>
-          <Button
-            type={"link"}
-            style={{ fontSize: 12 }}
-            onClick={() => {
-              setExpand(!expand)
-            }}
-          >
-            <DownOutlined rotate={expand ? 180 : 0} /> Collapse
-          </Button>
+          {items.length > 6 && (
+            <Button
+              type={"link"}
+              style={{ fontSize: 12 }}
+              onClick={() => {
+                setExpand(!expand)
+              }}
+            >
+              <DownOutlined rotate={expand ? 180 : 0} /> Collapse
+            </Button>
+          )}
         </Space>
       </div>
     </Form>

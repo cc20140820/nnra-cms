@@ -1,6 +1,8 @@
 export enum FormTypeEnum {
-  input = "input",
-  select = "select",
+  Input = "Input",
+  Select = "Select",
+  MultipleSelect = "Multiple_Select",
+  RangePicker = "Range_Picker",
 }
 
 type SelectOptionType = {
