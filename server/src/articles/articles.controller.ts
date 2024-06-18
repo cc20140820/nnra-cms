@@ -16,13 +16,22 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 export class ArticlesController {
   constructor(private readonly articlesService: ArticlesService) {}
 
-  @Post()
+  @Post('/add')
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articlesService.create(createArticleDto);
   }
 
-  @Get()
-  findAll(@Query() query: { author?: string; title?: string }) {
+  @Post()
+  findAll(
+    @Body()
+    query: {
+      author?: string;
+      title?: string;
+      category?: number;
+      tags?: number[];
+      created_at?: string[];
+    },
+  ) {
     return this.articlesService.findAll(query);
   }
 

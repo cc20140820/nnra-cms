@@ -17,7 +17,13 @@ export class ArticlesService {
 
   // TODO 分页
   // 字符串模糊查询
-  findAll(options: { author?: string; title?: string }): Promise<Article[]> {
+  findAll(options: {
+    author?: string;
+    title?: string;
+    category?: number;
+    tags?: number[];
+    created_at?: string[];
+  }): Promise<Article[]> {
     const query: any = {};
     if (options.author) {
       query.author = options.author;
@@ -25,6 +31,7 @@ export class ArticlesService {
     if (options.title) {
       query.title = options.title;
     }
+    console.log('wtf', query);
     return this.articleModel.find(query).select('-_id').exec();
   }
 

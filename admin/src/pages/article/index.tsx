@@ -1,9 +1,10 @@
-import React from "react"
-import { Card, Space, Table, Tag } from "antd"
+import React, { useState } from "react"
+import { Button, Card, Col, Row, Space, Table, Tag } from "antd"
 import type { TableProps } from "antd"
 import AdvancedSearchForm from "@/components/AdvancedSearchForm"
 import api from "./api"
 import { FormTypeEnum } from "@/components/AdvancedSearchForm/type"
+import ArticleModal, { FormValuesType } from "./components/ArticleModal"
 import { useRequest } from "ahooks"
 import dayjs from "dayjs"
 
@@ -16,6 +17,8 @@ type DataType = {
 }
 
 const Article: React.FC = () => {
+  const [modalOpen, setModalOpen] = useState(false)
+
   const { data, loading, run } = useRequest(api.getArticles)
 
   const handleSearch = async (values: Record<string, any>) => {
@@ -24,6 +27,18 @@ const Article: React.FC = () => {
       dayjs(values.created_at[1]).format("YYYY-MM-DD"),
     ]
     run(values)
+  }
+
+  const handleCreate = () => {
+    setModalOpen(true)
+  }
+
+  const handleCloseModal = async (append?: FormValuesType) => {
+    if (append) {
+      const res = await api.addArticle(append)
+      console.log("wtf", append, res)
+    }
+    setModalOpen(false)
   }
 
   const formItems = [
@@ -85,29 +100,40 @@ const Article: React.FC = () => {
       ),
     },
     {
-      title: "Created at",
-      dataIndex: "created_at",
-      render: (text) => dayjs(text).format("DD/MM/YYYY"),
+      title: "Content",
+      dataIndex: "content",
     },
     {
-      title: "Updated at",
-      dataIndex: "updated_at",
+      title: "Created at",
+      dataIndex: "created_at",
       render: (text) => dayjs(text).format("DD/MM/YYYY"),
     },
   ]
 
   return (
-    <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-      <AdvancedSearchForm items={formItems} onSearch={handleSearch} />
-      <Card>
-        <Table
-          rowKey={"uid"}
-          loading={loading}
-          columns={columns}
-          dataSource={data?.data}
-        />
-      </Card>
-    </Space>
+    <>
+      <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+        <AdvancedSearchForm items={formItems} onSearch={handleSearch} />
+        <Card>
+          <Space direction="vertical" style={{ display: "flex" }}>
+            <Row justify={"end"}>
+              <Col>
+                <Button type="primary" onClick={handleCreate}>
+                  New
+                </Button>
+              </Col>
+            </Row>
+            <Table
+              rowKey={"uid"}
+              loading={loading}
+              columns={columns}
+              dataSource={data?.data}
+            />
+          </Space>
+        </Card>
+      </Space>
+      <ArticleModal open={modalOpen} onClose={handleCloseModal} />
+    </>
   )
 }
 
