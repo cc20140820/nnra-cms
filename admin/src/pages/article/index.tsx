@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Button,
   Card,
@@ -19,30 +19,38 @@ import ArticleModal, { FormValuesType } from "./components/ArticleModal"
 import { useRequest } from "ahooks"
 import dayjs from "dayjs"
 
-const { Text, Paragraph } = Typography
+const { Paragraph } = Typography
 
 type DataType = {
   id: string
   tagIds: string[]
 }
 
+const PAGE_SIZE = 2
+
 const Article: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(1)
   const [searchParams, setSearchParams] = useState({})
   const [currentRow, setCurrentRow] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextHolder] = Modal.useModal()
 
-  const { data, loading, run } = useRequest(api.getArticles)
+  const { data, loading, run } = useRequest(api.getArticles, {
+    manual: true,
+    onSuccess: (_, [params]) => {
+      setCurrentPage(params.current)
+    },
+  })
 
   const handleSearch = async (values: Record<string, any>) => {
-    if (values.created_at[0] && values.created_at[1]) {
-      values.created_at = [
-        dayjs(values.created_at[0]).format("YYYY-MM-DD"),
-        dayjs(values.created_at[1]).format("YYYY-MM-DD"),
+    if (Array.isArray(values.createdAt) && values.createdAt.length > 0) {
+      values.createdAt = [
+        dayjs(values.createdAt[0]).format("YYYY-MM-DD"),
+        dayjs(values.createdAt[1]).format("YYYY-MM-DD"),
       ]
     }
     setSearchParams(values)
-    run(values)
+    run({ ...values, current: 1, pageSize: PAGE_SIZE })
   }
 
   const handleCreate = () => {
@@ -54,7 +62,7 @@ const Article: React.FC = () => {
       currentRow
         ? await api.updateArticle({ ...append, id: currentRow.id })
         : await api.addArticle(append)
-      run(searchParams)
+      run({ ...searchParams, current: 1, pageSize: PAGE_SIZE })
     }
     setCurrentRow(null)
     setModalOpen(false)
@@ -62,11 +70,11 @@ const Article: React.FC = () => {
 
   const handleDelete = (id: string) => {
     modal.confirm({
-      title: "Delete record",
-      content: "Are you sure?",
+      title: "Are you sure?",
+      content: `You will delete record ${id}`,
       onOk: async () => {
         await api.removeArticle(id)
-        run(searchParams)
+        run({ ...searchParams, current: 1, pageSize: PAGE_SIZE })
       },
     })
     return
@@ -77,12 +85,16 @@ const Article: React.FC = () => {
     setCurrentRow(record)
   }
 
+  const handlePageChange = (current: number, pageSize: number) => {
+    run({ ...searchParams, current, pageSize })
+  }
+
   const formItems = [
     { type: FormTypeEnum.Input, name: "author", label: "Author" },
     { type: FormTypeEnum.Input, name: "title", label: "Title" },
     {
       type: FormTypeEnum.Select,
-      name: "category",
+      name: "categoryId",
       label: "Category",
       options: [
         { label: "category1", value: 1 },
@@ -92,7 +104,7 @@ const Article: React.FC = () => {
     },
     {
       type: FormTypeEnum.MultipleSelect,
-      name: "tags",
+      name: "tagIds",
       label: "Tags",
       options: [
         { label: "tag1", value: 1 },
@@ -104,7 +116,7 @@ const Article: React.FC = () => {
     },
     {
       type: FormTypeEnum.RangePicker,
-      name: "created_at",
+      name: "createdAt",
       label: "Created",
     },
   ]
@@ -142,9 +154,9 @@ const Article: React.FC = () => {
       render: (text) => <Paragraph ellipsis={{ rows: 2 }}>{text}</Paragraph>,
     },
     {
-      title: "Created at",
-      dataIndex: "created_at",
-      render: (text) => dayjs(text).format("DD/MM/YYYY"),
+      title: "Created",
+      dataIndex: "createdAt",
+      render: (text) => dayjs(text).format("YYYY-MM-DD"),
     },
     {
       title: "Action",
@@ -156,6 +168,10 @@ const Article: React.FC = () => {
       ),
     },
   ]
+
+  useEffect(() => {
+    run({ current: 1, pageSize: PAGE_SIZE })
+  }, [])
 
   return (
     <>
@@ -175,6 +191,11 @@ const Article: React.FC = () => {
               loading={loading}
               columns={columns}
               dataSource={data?.data}
+              pagination={{
+                current: currentPage,
+                pageSize: PAGE_SIZE,
+                onChange: handlePageChange,
+              }}
             />
           </Space>
         </Card>

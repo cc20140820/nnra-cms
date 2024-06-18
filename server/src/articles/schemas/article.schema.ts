@@ -24,10 +24,10 @@ export class Article extends Document {
   @Prop()
   content: string;
 
-  @Prop({ default: new Date() })
+  @Prop()
   createdAt: Date;
 
-  @Prop({ default: new Date() })
+  @Prop({ default: Date.now })
   updatedAt: Date;
 }
 

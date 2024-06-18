@@ -17,15 +17,15 @@ export class ArticlesService {
   }
 
   // TODO 分页
-  // TODO 字符串模糊查询
   findAll(options: {
     author?: string;
     title?: string;
     categoryId?: number;
     tagIds?: number[];
-    created_at?: string[];
+    createdAt?: string[];
   }): Promise<Article[]> {
     const query: any = {};
+
     if (options.author) {
       query.author = { $regex: options.author, $options: 'i' };
     }
@@ -35,13 +35,14 @@ export class ArticlesService {
     if (options.categoryId) {
       query.categoryId = options.categoryId;
     }
+
     if (options.tagIds && options.tagIds.length > 0) {
-      query.tagIds = { $in: options.tagIds }; // 使用 $in 操作符查询 tagIds
+      query.tagIds = { $all: options.tagIds };
     }
-    if (options.created_at && options.created_at.length === 2) {
+    if (options.createdAt && options.createdAt.length === 2) {
       query.createdAt = {
-        $gte: new Date(options.created_at[0]),
-        $lte: new Date(options.created_at[1]),
+        $gte: new Date(options.createdAt[0]),
+        $lte: new Date(options.createdAt[1]),
       };
     }
     return this.articleModel.find(query).select('-__v -_id').exec();

@@ -2,11 +2,11 @@ import {
   Controller,
   Get,
   Post,
-  Query,
   Body,
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -22,6 +22,7 @@ export class ArticlesController {
   }
 
   @Post()
+  @HttpCode(200)
   findAll(
     @Body()
     query: {
@@ -29,7 +30,7 @@ export class ArticlesController {
       title?: string;
       categoryId?: number;
       tagIds?: number[];
-      created_at?: string[];
+      createdAt?: string[];
     },
   ) {
     return this.articlesService.findAll(query);

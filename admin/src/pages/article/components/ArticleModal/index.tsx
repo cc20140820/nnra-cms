@@ -1,11 +1,13 @@
 import React from "react"
-import { Form, Input, Modal, Radio, Select } from "antd"
+import { DatePicker, Form, Input, Modal, Radio, Select } from "antd"
+import dayjs, { Dayjs } from "dayjs"
 
 export type FormValuesType = {
   author: string
   title: string
   categoryId: number
   tags: number[]
+  createdAt: Dayjs | Date
   content?: string
 }
 
@@ -28,6 +30,8 @@ function ArticleModal(props: ArticleModalType) {
   const [form] = Form.useForm()
 
   const onCreate = (values: FormValuesType) => {
+    const createdDate = values.createdAt as Dayjs
+    values.createdAt = createdDate.toDate()
     onClose(values)
   }
 
@@ -45,7 +49,9 @@ function ArticleModal(props: ArticleModalType) {
           layout="vertical"
           form={form}
           name="article_modal"
-          initialValues={record}
+          initialValues={
+            record ? { ...record, createdAt: dayjs(record?.createdAt) } : null
+          }
           onFinish={(values) => onCreate(values)}
           clearOnDestroy
         >
@@ -58,6 +64,13 @@ function ArticleModal(props: ArticleModalType) {
       </Form.Item>
       <Form.Item name="title" label="Title" rules={[{ required: true }]}>
         <Input />
+      </Form.Item>
+      <Form.Item
+        name="createdAt"
+        label="Created At"
+        rules={[{ required: true }]}
+      >
+        <DatePicker disabled={!!record} style={{ width: "100%" }} />
       </Form.Item>
       <Form.Item
         name="categoryId"
