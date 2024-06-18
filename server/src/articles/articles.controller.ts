@@ -26,6 +26,8 @@ export class ArticlesController {
   findAll(
     @Body()
     query: {
+      current: number;
+      pageSize: number;
       author?: string;
       title?: string;
       categoryId?: number;
@@ -33,6 +35,10 @@ export class ArticlesController {
       createdAt?: string[];
     },
   ) {
+    // 确保分页参数有默认值
+    const current = query.current || 1;
+    const pageSize = query.pageSize || 10; // 假设每页默认显示10条记录
+
     return this.articlesService.findAll(query);
   }
 
