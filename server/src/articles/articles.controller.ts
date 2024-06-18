@@ -27,8 +27,8 @@ export class ArticlesController {
     query: {
       author?: string;
       title?: string;
-      category?: number;
-      tags?: number[];
+      categoryId?: number;
+      tagIds?: number[];
       created_at?: string[];
     },
   ) {
@@ -40,9 +40,9 @@ export class ArticlesController {
     return this.articlesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArticleDto: UpdateArticleDto) {
-    return this.articlesService.update(id, updateArticleDto);
+  @Patch()
+  update(@Body() updateArticleDto: UpdateArticleDto) {
+    return this.articlesService.update(updateArticleDto);
   }
 
   @Delete(':id')

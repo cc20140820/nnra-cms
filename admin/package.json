@@ -23,7 +23,7 @@
     "zustand": "^4.5.2"
   },
   "scripts": {
-    "dev": "craco start",
+    "dev": "cross-env PORT=3001 craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
@@ -57,6 +57,7 @@
     ]
   },
   "devDependencies": {
-    "@craco/craco": "^7.1.0"
+    "@craco/craco": "^7.1.0",
+    "cross-env": "^7.0.3"
   }
 }

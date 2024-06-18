@@ -1,5 +1,16 @@
 import React, { useState } from "react"
-import { Button, Card, Col, Row, Space, Table, Tag } from "antd"
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Space,
+  Table,
+  Tag,
+  Divider,
+  Modal,
+  Typography,
+} from "antd"
 import type { TableProps } from "antd"
 import AdvancedSearchForm from "@/components/AdvancedSearchForm"
 import api from "./api"
@@ -8,24 +19,29 @@ import ArticleModal, { FormValuesType } from "./components/ArticleModal"
 import { useRequest } from "ahooks"
 import dayjs from "dayjs"
 
+const { Text, Paragraph } = Typography
+
 type DataType = {
-  key: string
-  name: string
-  age: number
-  address: string
-  tags: string[]
+  id: string
+  tagIds: string[]
 }
 
 const Article: React.FC = () => {
+  const [searchParams, setSearchParams] = useState({})
+  const [currentRow, setCurrentRow] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)
+  const [modal, contextHolder] = Modal.useModal()
 
   const { data, loading, run } = useRequest(api.getArticles)
 
   const handleSearch = async (values: Record<string, any>) => {
-    values.created_at = [
-      dayjs(values.created_at[0]).format("YYYY-MM-DD"),
-      dayjs(values.created_at[1]).format("YYYY-MM-DD"),
-    ]
+    if (values.created_at[0] && values.created_at[1]) {
+      values.created_at = [
+        dayjs(values.created_at[0]).format("YYYY-MM-DD"),
+        dayjs(values.created_at[1]).format("YYYY-MM-DD"),
+      ]
+    }
+    setSearchParams(values)
     run(values)
   }
 
@@ -35,10 +51,30 @@ const Article: React.FC = () => {
 
   const handleCloseModal = async (append?: FormValuesType) => {
     if (append) {
-      const res = await api.addArticle(append)
-      console.log("wtf", append, res)
+      currentRow
+        ? await api.updateArticle({ ...append, id: currentRow.id })
+        : await api.addArticle(append)
+      run(searchParams)
     }
+    setCurrentRow(null)
     setModalOpen(false)
+  }
+
+  const handleDelete = (id: string) => {
+    modal.confirm({
+      title: "Delete record",
+      content: "Are you sure?",
+      onOk: async () => {
+        await api.removeArticle(id)
+        run(searchParams)
+      },
+    })
+    return
+  }
+
+  const handleEdit = (record: any) => {
+    setModalOpen(true)
+    setCurrentRow(record)
   }
 
   const formItems = [
@@ -84,16 +120,16 @@ const Article: React.FC = () => {
     },
     {
       title: "Category",
-      dataIndex: "category",
+      dataIndex: "categoryId",
     },
     {
       title: "Tags",
-      dataIndex: "tags",
-      render: (_, { tags }) => (
+      dataIndex: "tagIds",
+      render: (_, { tagIds }) => (
         <>
-          {tags.map((tag) => (
-            <Tag key={tag} color={"green"}>
-              {tag}
+          {tagIds.map((tagId) => (
+            <Tag key={tagId} color={"green"}>
+              {tagId}
             </Tag>
           ))}
         </>
@@ -102,11 +138,22 @@ const Article: React.FC = () => {
     {
       title: "Content",
       dataIndex: "content",
+      width: "30%",
+      render: (text) => <Paragraph ellipsis={{ rows: 2 }}>{text}</Paragraph>,
     },
     {
       title: "Created at",
       dataIndex: "created_at",
       render: (text) => dayjs(text).format("DD/MM/YYYY"),
+    },
+    {
+      title: "Action",
+      render: (_, record) => (
+        <Space split={<Divider type="vertical" />}>
+          <a onClick={() => handleEdit(record)}>Edit</a>
+          <a onClick={() => handleDelete(record.id)}>Delete</a>
+        </Space>
+      ),
     },
   ]
 
@@ -124,7 +171,7 @@ const Article: React.FC = () => {
               </Col>
             </Row>
             <Table
-              rowKey={"uid"}
+              rowKey={"id"}
               loading={loading}
               columns={columns}
               dataSource={data?.data}
@@ -132,7 +179,12 @@ const Article: React.FC = () => {
           </Space>
         </Card>
       </Space>
-      <ArticleModal open={modalOpen} onClose={handleCloseModal} />
+      {contextHolder}
+      <ArticleModal
+        open={modalOpen}
+        record={currentRow}
+        onClose={handleCloseModal}
+      />
     </>
   )
 }

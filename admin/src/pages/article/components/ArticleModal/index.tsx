@@ -4,27 +4,28 @@ import { Form, Input, Modal, Radio, Select } from "antd"
 export type FormValuesType = {
   author: string
   title: string
-  category: number
+  categoryId: number
   tags: number[]
   content?: string
 }
 
 type ArticleModalType = {
   open: boolean
+  record: any
   onClose: (append?: FormValuesType) => void
 }
 
-function ArticleModal(props: ArticleModalType) {
-  const { open, onClose } = props
-  const [form] = Form.useForm()
+const tagMap = [
+  { label: "tag1", value: 1 },
+  { label: "tag2", value: 2 },
+  { label: "tag3", value: 3 },
+  { label: "tag4", value: 4 },
+  { label: "tag5", value: 5 },
+]
 
-  const tagMap = [
-    { label: "tag1", value: 1 },
-    { label: "tag2", value: 2 },
-    { label: "tag3", value: 3 },
-    { label: "tag4", value: 4 },
-    { label: "tag5", value: 5 },
-  ]
+function ArticleModal(props: ArticleModalType) {
+  const { open, record, onClose } = props
+  const [form] = Form.useForm()
 
   const onCreate = (values: FormValuesType) => {
     onClose(values)
@@ -44,6 +45,7 @@ function ArticleModal(props: ArticleModalType) {
           layout="vertical"
           form={form}
           name="article_modal"
+          initialValues={record}
           onFinish={(values) => onCreate(values)}
           clearOnDestroy
         >
@@ -57,14 +59,18 @@ function ArticleModal(props: ArticleModalType) {
       <Form.Item name="title" label="Title" rules={[{ required: true }]}>
         <Input />
       </Form.Item>
-      <Form.Item name="category" label="Category" rules={[{ required: true }]}>
+      <Form.Item
+        name="categoryId"
+        label="Category"
+        rules={[{ required: true }]}
+      >
         <Radio.Group>
           <Radio value={1}>category1</Radio>
           <Radio value={2}>category2</Radio>
           <Radio value={3}>category3</Radio>
         </Radio.Group>
       </Form.Item>
-      <Form.Item name="tags" label="Tags" rules={[{ required: true }]}>
+      <Form.Item name="tagIds" label="Tags" rules={[{ required: true }]}>
         <Select mode="multiple" allowClear options={tagMap} />
       </Form.Item>
       <Form.Item name="content" label="Content">
