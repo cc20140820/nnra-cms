@@ -17,13 +17,18 @@ export class ArticlesService {
   }
 
   // TODO 分页
-  findAll(options: {
-    author?: string;
-    title?: string;
-    categoryId?: number;
-    tagIds?: number[];
-    createdAt?: string[];
-  }): Promise<Article[]> {
+  async findAll(
+    current: number,
+    pageSize: number,
+    options: {
+      author?: string;
+      title?: string;
+      categoryId?: number;
+      tagIds?: number[];
+      createdAt?: string[];
+    },
+  ): Promise<any> {
+    const skip = (current - 1) * pageSize;
     const query: any = {};
 
     if (options.author) {
@@ -45,7 +50,26 @@ export class ArticlesService {
         $lte: new Date(options.createdAt[1]),
       };
     }
-    return this.articleModel.find(query).select('-__v -_id').exec();
+    const total = await this.articleModel.countDocuments(); // 获取总记录数
+    const list = await this.articleModel
+      .find(query)
+      .skip(skip)
+      .limit(pageSize)
+      .select('-__v -_id')
+      .exec();
+
+    const data = {
+      list,
+      current,
+      pageSize,
+      total,
+    };
+
+    return {
+      success: true,
+      data,
+      errorMessage: '',
+    };
   }
 
   // 详情

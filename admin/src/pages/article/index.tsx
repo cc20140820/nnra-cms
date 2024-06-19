@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
   Button,
   Card,
@@ -35,8 +35,8 @@ const Article: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextHolder] = Modal.useModal()
 
-  const { data, loading, run } = useRequest(api.getArticles, {
-    manual: true,
+  const { data, loading, run, refresh } = useRequest(api.getArticles, {
+    defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
     onSuccess: (_, [params]) => {
       setCurrentPage(params.current)
     },
@@ -62,7 +62,7 @@ const Article: React.FC = () => {
       currentRow
         ? await api.updateArticle({ ...append, id: currentRow.id })
         : await api.addArticle(append)
-      run({ ...searchParams, current: 1, pageSize: PAGE_SIZE })
+      refresh()
     }
     setCurrentRow(null)
     setModalOpen(false)
@@ -74,7 +74,7 @@ const Article: React.FC = () => {
       content: `You will delete record ${id}`,
       onOk: async () => {
         await api.removeArticle(id)
-        run({ ...searchParams, current: 1, pageSize: PAGE_SIZE })
+        refresh()
       },
     })
     return
@@ -169,9 +169,7 @@ const Article: React.FC = () => {
     },
   ]
 
-  useEffect(() => {
-    run({ current: 1, pageSize: PAGE_SIZE })
-  }, [])
+  console.log("data", data)
 
   return (
     <>
@@ -190,8 +188,9 @@ const Article: React.FC = () => {
               rowKey={"id"}
               loading={loading}
               columns={columns}
-              dataSource={data?.data}
+              dataSource={data?.data?.data?.list}
               pagination={{
+                total: data?.data?.data?.total,
                 current: currentPage,
                 pageSize: PAGE_SIZE,
                 onChange: handlePageChange,

@@ -37,9 +37,8 @@ export class ArticlesController {
   ) {
     // 确保分页参数有默认值
     const current = query.current || 1;
-    const pageSize = query.pageSize || 10; // 假设每页默认显示10条记录
-
-    return this.articlesService.findAll(query);
+    const pageSize = query.pageSize || 10;
+    return this.articlesService.findAll(current, pageSize, query);
   }
 
   @Get(':id')
