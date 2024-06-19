@@ -8,3 +8,8 @@ The CMS system developed by nest.js and next.js is used to implement SSR server-
 admin  管理后台
 server 后端服务
 web    用户前端
+
+
+### TODO
+自增业务主键
+封装返回类型、分页数据类型

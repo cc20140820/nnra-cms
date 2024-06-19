@@ -22,6 +22,9 @@ dependencies:
   mongoose:
     specifier: ^8.4.1
     version: 8.4.1
+  mongoose-auto-increment:
+    specifier: ^5.0.1
+    version: 5.0.1(mongoose@8.4.1)
   reflect-metadata:
     specifier: ^0.2.0
     version: 0.2.0
@@ -2602,6 +2605,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
+  /extend@3.0.2:
+    resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
+    dev: false
+
   /external-editor@3.1.0:
     resolution: {integrity: sha512-hMQ4CX1p1izmuLYyZqLMO/qGNw10wSv9QDCPfzXfyFrOaCSSoRfqE1Kf1s5an66J5JZC62NewG+mK49jOCtQew==}
     engines: {node: '>=4'}
@@ -3999,6 +4006,15 @@ packages:
       '@mongodb-js/saslprep': 1.1.7
       bson: 6.7.0
       mongodb-connection-string-url: 3.0.1
+    dev: false
+
+  /mongoose-auto-increment@5.0.1(mongoose@8.4.1):
+    resolution: {integrity: sha512-fuSw0np0ZZXYjNBBrD6Wg0y70N0i5NhBuH3AIETTXCchaq45FeHpISoQ3fFbbdSFhfVEDRtg+hVxEDpFjdI2lw==}
+    peerDependencies:
+      mongoose: ^4.1.12
+    dependencies:
+      extend: 3.0.2
+      mongoose: 8.4.1
     dev: false
 
   /mongoose@8.4.1:
