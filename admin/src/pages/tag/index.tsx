@@ -12,7 +12,7 @@ type DataType = {
 
 const PAGE_SIZE = 10
 
-const Article: React.FC = () => {
+const Tag: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentRow, setCurrentRow] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)
@@ -65,11 +65,12 @@ const Article: React.FC = () => {
     {
       title: "ID",
       dataIndex: "id",
-      width: "10%",
+      width: "30%",
     },
     {
       title: "Name",
       dataIndex: "name",
+      width: "30%",
     },
     {
       title: "Action",
@@ -119,4 +120,4 @@ const Article: React.FC = () => {
   )
 }
 
-export default Article
+export default Tag

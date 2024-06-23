@@ -5,7 +5,7 @@ import dayjs, { Dayjs } from "dayjs"
 export type FormValuesType = {
   author: string
   title: string
-  categoryId: number
+  categoryId: string
   tags: number[]
   createdAt: Dayjs | Date
   content?: string
@@ -14,19 +14,13 @@ export type FormValuesType = {
 type ArticleModalType = {
   open: boolean
   record: any
+  categoryMap: { label: string; value: string }[]
+  tagMap: { label: string; value: string }[]
   onClose: (append?: FormValuesType) => void
 }
 
-const tagMap = [
-  { label: "tag1", value: 1 },
-  { label: "tag2", value: 2 },
-  { label: "tag3", value: 3 },
-  { label: "tag4", value: 4 },
-  { label: "tag5", value: 5 },
-]
-
 function ArticleModal(props: ArticleModalType) {
-  const { open, record, onClose } = props
+  const { open, record, categoryMap, tagMap, onClose } = props
   const [form] = Form.useForm()
 
   const onCreate = (values: FormValuesType) => {
@@ -78,9 +72,11 @@ function ArticleModal(props: ArticleModalType) {
         rules={[{ required: true }]}
       >
         <Radio.Group>
-          <Radio value={1}>category1</Radio>
-          <Radio value={2}>category2</Radio>
-          <Radio value={3}>category3</Radio>
+          {categoryMap.map((v) => (
+            <Radio key={v.value} value={v.value}>
+              {v.label}
+            </Radio>
+          ))}
         </Radio.Group>
       </Form.Item>
       <Form.Item name="tagIds" label="Tags" rules={[{ required: true }]}>

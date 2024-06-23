@@ -31,6 +31,10 @@ const PAGE_SIZE = 10
 const Article: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [searchParams, setSearchParams] = useState({})
+  const [categoryMap, setCategoryMap] = useState<
+    { label: string; value: string }[]
+  >([])
+  const [tagMap, setTagMap] = useState<{ label: string; value: string }[]>([])
   const [currentRow, setCurrentRow] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextHolder] = Modal.useModal()
@@ -39,6 +43,26 @@ const Article: React.FC = () => {
     defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
     onSuccess: (_, [params]) => {
       setCurrentPage(params.current)
+    },
+  })
+
+  useRequest(api.getCategories, {
+    onSuccess: (data) => {
+      const res = data?.data?.list.map((v: any) => ({
+        label: v.name,
+        value: v.id,
+      }))
+      setCategoryMap(res)
+    },
+  })
+
+  useRequest(api.getTags, {
+    onSuccess: (data) => {
+      const res = data?.data?.list.map((v: any) => ({
+        label: v.name,
+        value: v.id,
+      }))
+      setTagMap(res)
     },
   })
 
@@ -96,11 +120,7 @@ const Article: React.FC = () => {
       type: FormTypeEnum.Select,
       name: "categoryId",
       label: "Category",
-      options: [
-        { label: "category1", value: 1 },
-        { label: "category2", value: 2 },
-        { label: "category3", value: 3 },
-      ],
+      options: categoryMap,
     },
     {
       type: FormTypeEnum.MultipleSelect,
@@ -133,6 +153,7 @@ const Article: React.FC = () => {
     {
       title: "Category",
       dataIndex: "categoryId",
+      render: (text) => categoryMap.find((v) => v.value === text)?.label,
     },
     {
       title: "Tags",
@@ -141,7 +162,7 @@ const Article: React.FC = () => {
         <>
           {tagIds.map((tagId) => (
             <Tag key={tagId} color={"green"}>
-              {tagId}
+              {tagMap.find((v) => v.value === tagId)?.label}
             </Tag>
           ))}
         </>
@@ -201,6 +222,8 @@ const Article: React.FC = () => {
       <ArticleModal
         open={modalOpen}
         record={currentRow}
+        categoryMap={categoryMap}
+        tagMap={tagMap}
         onClose={handleCloseModal}
       />
     </>

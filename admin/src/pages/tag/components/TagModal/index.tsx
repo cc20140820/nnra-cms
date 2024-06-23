@@ -5,13 +5,13 @@ export type FormValuesType = {
   name: string
 }
 
-type ArticleModalType = {
+type TagModalType = {
   open: boolean
   record: any
   onClose: (append?: FormValuesType) => void
 }
 
-function TagModal(props: ArticleModalType) {
+function TagModal(props: TagModalType) {
   const { open, record, onClose } = props
   const [form] = Form.useForm()
 

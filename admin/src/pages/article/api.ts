@@ -6,6 +6,10 @@ const Api = {
   addArticle: (params: any) => ins.post(`/articles/add`, params),
   removeArticle: (id: string) => ins.delete(`/articles/${id}`),
   updateArticle: (params: any) => ins.patch(`/articles`, params),
+
+  // other field
+  getCategories: (params: any) => ins.get("/category", params),
+  getTags: (params: any) => ins.get("/tag", params),
 }
 
 export default Api

@@ -13,17 +13,11 @@ type DataType = {
 const PAGE_SIZE = 10
 
 const Category: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1)
   const [currentRow, setCurrentRow] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextHolder] = Modal.useModal()
 
-  const { data, loading, run, refresh } = useRequest(api.getCategories, {
-    defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
-    onSuccess: (_, [params]) => {
-      setCurrentPage(params.current)
-    },
-  })
+  const { data, loading, refresh } = useRequest(api.getCategories)
 
   const handleCreate = () => {
     setModalOpen(true)
@@ -57,19 +51,16 @@ const Category: React.FC = () => {
     setCurrentRow(record)
   }
 
-  const handlePageChange = (current: number, pageSize: number) => {
-    run({ current, pageSize })
-  }
-
   const columns: TableProps<DataType>["columns"] = [
     {
       title: "ID",
       dataIndex: "id",
-      width: "10%",
+      width: "30%",
     },
     {
       title: "Name",
       dataIndex: "name",
+      width: "30%",
     },
     {
       title: "Action",
@@ -101,9 +92,7 @@ const Category: React.FC = () => {
               dataSource={data?.data?.list}
               pagination={{
                 total: data?.data?.total,
-                current: currentPage,
                 pageSize: PAGE_SIZE,
-                onChange: handlePageChange,
               }}
             />
           </Space>

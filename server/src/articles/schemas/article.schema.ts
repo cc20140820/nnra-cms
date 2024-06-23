@@ -16,7 +16,7 @@ export class Article extends Document {
   title: string;
 
   @Prop()
-  categoryId: number;
+  categoryId: string;
 
   @Prop()
   tagIds: number[];

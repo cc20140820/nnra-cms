@@ -5,9 +5,9 @@ export class CreateArticleDto {
 
   title: string;
 
-  categoryId: number;
+  categoryId: string;
 
-  tagIds: number[];
+  tagIds: string[];
 
   content: string;
 
