@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import * as autoIncrement from 'mongoose-auto-increment';
+import { v4 as uuidv4 } from 'uuid';
 
 export type ArticleDocument = Article & Document;
 
 @Schema()
 export class Article extends Document {
-  @Prop()
-  id: number;
+  @Prop({ default: uuidv4 })
+  id: string;
 
   @Prop()
   author: string;
@@ -32,4 +32,3 @@ export class Article extends Document {
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);
-ArticleSchema.plugin(autoIncrement.plugin, { model: 'Article', field: 'id' });

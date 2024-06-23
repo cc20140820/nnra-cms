@@ -12,12 +12,12 @@ import {
   Typography,
 } from "antd"
 import type { TableProps } from "antd"
-import AdvancedSearchForm from "@/components/AdvancedSearchForm"
-import api from "./api"
-import { FormTypeEnum } from "@/components/AdvancedSearchForm/type"
-import ArticleModal, { FormValuesType } from "./components/ArticleModal"
 import { useRequest } from "ahooks"
 import dayjs from "dayjs"
+import AdvancedSearchForm from "@/components/AdvancedSearchForm"
+import { FormTypeEnum } from "@/components/AdvancedSearchForm/type"
+import ArticleModal, { FormValuesType } from "./components/ArticleModal"
+import api from "./api"
 
 const { Paragraph } = Typography
 
@@ -26,7 +26,7 @@ type DataType = {
   tagIds: string[]
 }
 
-const PAGE_SIZE = 2
+const PAGE_SIZE = 10
 
 const Article: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -169,8 +169,6 @@ const Article: React.FC = () => {
     },
   ]
 
-  console.log("data", data)
-
   return (
     <>
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
@@ -188,9 +186,9 @@ const Article: React.FC = () => {
               rowKey={"id"}
               loading={loading}
               columns={columns}
-              dataSource={data?.data?.data?.list}
+              dataSource={data?.data?.list}
               pagination={{
-                total: data?.data?.data?.total,
+                total: data?.data?.total,
                 current: currentPage,
                 pageSize: PAGE_SIZE,
                 onChange: handlePageChange,

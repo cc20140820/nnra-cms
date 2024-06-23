@@ -34,8 +34,8 @@ const menus: MenuItem[] = [
     icon: <MailOutlined />,
     children: [
       { key: "article", label: "Article" },
-      { key: "two", label: "Option 2" },
-      { key: "three", label: "Option 3" },
+      { key: "category", label: "Category" },
+      { key: "tag", label: "Tag" },
     ],
   },
   {

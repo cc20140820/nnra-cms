@@ -4,6 +4,8 @@ import ErrorPage from "./pages/error"
 import Login from "./pages/login"
 import Dashboard from "./pages/dashboard"
 import Article from "./pages/article"
+import Category from "./pages/category"
+import Tag from "./pages/tag"
 
 const router = createBrowserRouter([
   {
@@ -17,12 +19,12 @@ const router = createBrowserRouter([
         element: <Article />,
       },
       {
-        path: "/two",
-        element: <Dashboard />,
+        path: "/category",
+        element: <Category />,
       },
       {
-        path: "/three",
-        element: <Dashboard />,
+        path: "/tag",
+        element: <Tag />,
       },
       {
         path: "/four",

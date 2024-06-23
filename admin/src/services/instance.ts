@@ -9,7 +9,8 @@ const instance = axios.create({
 
 function handleResponse(response: any) {
   // 2xx 范围内的状态码都会触发该函数。
-  return response
+
+  return response.data
 }
 
 function handleError(error: any) {

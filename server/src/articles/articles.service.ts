@@ -49,12 +49,12 @@ export class ArticlesService {
         $lte: new Date(options.createdAt[1]),
       };
     }
-    const total = await this.articleModel.countDocuments(); // 获取总记录数
+    const total = await this.articleModel.countDocuments(query); // 获取总记录数
     const list = await this.articleModel
       .find(query)
       .skip(skip)
       .limit(pageSize)
-      .select('-__v -_id')
+      .select('-__v')
       .exec();
 
     const data = {
@@ -73,7 +73,7 @@ export class ArticlesService {
 
   // 详情
   findOne(id: number): Promise<Article | null> {
-    return this.articleModel.findOne({ uid: id }).select('-_id').exec();
+    return this.articleModel.findOne({ uid: id }).exec();
   }
 
   update(updateArticleDto: UpdateArticleDto): Promise<Article | null> {
