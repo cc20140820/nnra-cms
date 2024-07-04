@@ -1,6 +1,7 @@
 import React from "react"
 import { DatePicker, Form, Input, Modal, Radio, Select } from "antd"
 import dayjs, { Dayjs } from "dayjs"
+import { useArticleMainContext } from "../../hooks/useArticleMain"
 
 export type FormValuesType = {
   author: string
@@ -11,32 +12,26 @@ export type FormValuesType = {
   content?: string
 }
 
-type ArticleModalType = {
-  open: boolean
-  record: any
-  categoryMap: { label: string; value: string }[]
-  tagMap: { label: string; value: string }[]
-  onClose: (append?: FormValuesType) => void
-}
+function ArticleModal() {
+  const { modalOpen, currentRow, categoryMap, tagMap, handleCloseModal } =
+    useArticleMainContext()
 
-function ArticleModal(props: ArticleModalType) {
-  const { open, record, categoryMap, tagMap, onClose } = props
   const [form] = Form.useForm()
 
   const onCreate = (values: FormValuesType) => {
     const createdDate = values.createdAt as Dayjs
     values.createdAt = createdDate.toDate()
-    onClose(values)
+    handleCloseModal(values)
   }
 
   return (
     <Modal
-      open={open}
+      open={modalOpen}
       title="Create a new article"
       okText="Create"
       cancelText="Cancel"
       okButtonProps={{ autoFocus: true, htmlType: "submit" }}
-      onCancel={() => onClose()}
+      onCancel={() => handleCloseModal()}
       destroyOnClose
       modalRender={(dom) => (
         <Form
@@ -44,7 +39,9 @@ function ArticleModal(props: ArticleModalType) {
           form={form}
           name="article_modal"
           initialValues={
-            record ? { ...record, createdAt: dayjs(record?.createdAt) } : null
+            currentRow
+              ? { ...currentRow, createdAt: dayjs(currentRow?.createdAt) }
+              : null
           }
           onFinish={(values) => onCreate(values)}
           clearOnDestroy
@@ -64,7 +61,7 @@ function ArticleModal(props: ArticleModalType) {
         label="Created At"
         rules={[{ required: true }]}
       >
-        <DatePicker disabled={!!record} style={{ width: "100%" }} />
+        <DatePicker disabled={!!currentRow} style={{ width: "100%" }} />
       </Form.Item>
       <Form.Item
         name="categoryId"

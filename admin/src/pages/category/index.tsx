@@ -15,7 +15,7 @@ const PAGE_SIZE = 10
 const Category: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)
-  const [modal, contextHolder] = Modal.useModal()
+  const [modal, contextModal] = Modal.useModal()
 
   const { data, loading, refresh } = useRequest(api.getCategories)
 
@@ -98,7 +98,7 @@ const Category: React.FC = () => {
           </Space>
         </Card>
       </Space>
-      {contextHolder}
+      {contextModal}
       <CategoryModal
         open={modalOpen}
         record={currentRow}

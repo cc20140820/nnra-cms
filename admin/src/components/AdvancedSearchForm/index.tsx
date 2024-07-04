@@ -89,6 +89,7 @@ const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
           </Button>
           <Button
             onClick={() => {
+              onSearch({})
               form.resetFields()
             }}
           >

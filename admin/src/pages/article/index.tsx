@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   Button,
   Card,
@@ -8,110 +8,45 @@ import {
   Table,
   Tag,
   Divider,
-  Modal,
   Typography,
 } from "antd"
 import type { TableProps } from "antd"
-import { useRequest } from "ahooks"
 import dayjs from "dayjs"
 import AdvancedSearchForm from "@/components/AdvancedSearchForm"
 import { FormTypeEnum } from "@/components/AdvancedSearchForm/type"
-import ArticleModal, { FormValuesType } from "./components/ArticleModal"
-import api from "./api"
+import ArticleModal from "./components/ArticleModal"
+import {
+  ArticleMainProvider,
+  useArticleMainContext,
+} from "./hooks/useArticleMain"
+import { PAGE_SIZE } from "./constant"
 
 const { Paragraph } = Typography
 
-type DataType = {
+type RecordType = {
   id: string
+  author: string
+  title: string
+  categoryId: string
   tagIds: string[]
+  content: string
+  createdAt: string
 }
 
-const PAGE_SIZE = 10
-
 const Article: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [searchParams, setSearchParams] = useState({})
-  const [categoryMap, setCategoryMap] = useState<
-    { label: string; value: string }[]
-  >([])
-  const [tagMap, setTagMap] = useState<{ label: string; value: string }[]>([])
-  const [currentRow, setCurrentRow] = useState<any>(null)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [modal, contextHolder] = Modal.useModal()
-
-  const { data, loading, run, refresh } = useRequest(api.getArticles, {
-    defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
-    onSuccess: (_, [params]) => {
-      setCurrentPage(params.current)
-    },
-  })
-
-  useRequest(api.getCategories, {
-    onSuccess: (data) => {
-      const res = data?.data?.list.map((v: any) => ({
-        label: v.name,
-        value: v.id,
-      }))
-      setCategoryMap(res)
-    },
-  })
-
-  useRequest(api.getTags, {
-    onSuccess: (data) => {
-      const res = data?.data?.list.map((v: any) => ({
-        label: v.name,
-        value: v.id,
-      }))
-      setTagMap(res)
-    },
-  })
-
-  const handleSearch = async (values: Record<string, any>) => {
-    if (Array.isArray(values.createdAt) && values.createdAt.length > 0) {
-      values.createdAt = [
-        dayjs(values.createdAt[0]).format("YYYY-MM-DD"),
-        dayjs(values.createdAt[1]).format("YYYY-MM-DD"),
-      ]
-    }
-    setSearchParams(values)
-    run({ ...values, current: 1, pageSize: PAGE_SIZE })
-  }
-
-  const handleCreate = () => {
-    setModalOpen(true)
-  }
-
-  const handleCloseModal = async (append?: FormValuesType) => {
-    if (append) {
-      currentRow
-        ? await api.updateArticle({ ...append, id: currentRow.id })
-        : await api.addArticle(append)
-      refresh()
-    }
-    setCurrentRow(null)
-    setModalOpen(false)
-  }
-
-  const handleDelete = (id: string) => {
-    modal.confirm({
-      title: "Are you sure?",
-      content: `You will delete record ${id}`,
-      onOk: async () => {
-        await api.removeArticle(id)
-        refresh()
-      },
-    })
-    return
-  }
-
-  const handleEdit = (record: any) => {
-    setModalOpen(true)
-    setCurrentRow(record)
-  }
-
-  const handlePageChange = (current: number, pageSize: number) => {
-    run({ ...searchParams, current, pageSize })
-  }
+  const {
+    categoryMap,
+    tagMap,
+    currentPage,
+    data,
+    loading,
+    contextModal,
+    handleSearch,
+    handleCreate,
+    handlePageChange,
+    handleEdit,
+    handleDelete,
+  } = useArticleMainContext()
 
   const formItems = [
     { type: FormTypeEnum.Input, name: "author", label: "Author" },
@@ -126,13 +61,7 @@ const Article: React.FC = () => {
       type: FormTypeEnum.MultipleSelect,
       name: "tagIds",
       label: "Tags",
-      options: [
-        { label: "tag1", value: 1 },
-        { label: "tag2", value: 2 },
-        { label: "tag3", value: 3 },
-        { label: "tag4", value: 4 },
-        { label: "tag5", value: 5 },
-      ],
+      options: tagMap,
     },
     {
       type: FormTypeEnum.RangePicker,
@@ -141,7 +70,7 @@ const Article: React.FC = () => {
     },
   ]
 
-  const columns: TableProps<DataType>["columns"] = [
+  const columns: TableProps<RecordType>["columns"] = [
     {
       title: "Author",
       dataIndex: "author",
@@ -193,6 +122,7 @@ const Article: React.FC = () => {
   return (
     <>
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+        {/* AdvancedSearchForm属于应用级别的业务组件，故不采用context */}
         <AdvancedSearchForm items={formItems} onSearch={handleSearch} />
         <Card>
           <Space direction="vertical" style={{ display: "flex" }}>
@@ -218,16 +148,18 @@ const Article: React.FC = () => {
           </Space>
         </Card>
       </Space>
-      {contextHolder}
-      <ArticleModal
-        open={modalOpen}
-        record={currentRow}
-        categoryMap={categoryMap}
-        tagMap={tagMap}
-        onClose={handleCloseModal}
-      />
+      {contextModal}
+      <ArticleModal />
     </>
   )
 }
 
-export default Article
+const EnhancedArticle: React.FC = () => {
+  return (
+    <ArticleMainProvider>
+      <Article />
+    </ArticleMainProvider>
+  )
+}
+
+export default EnhancedArticle

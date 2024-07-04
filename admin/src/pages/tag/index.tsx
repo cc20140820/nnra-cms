@@ -16,7 +16,7 @@ const Tag: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [currentRow, setCurrentRow] = useState<any>(null)
   const [modalOpen, setModalOpen] = useState(false)
-  const [modal, contextHolder] = Modal.useModal()
+  const [modal, contextModal] = Modal.useModal()
 
   const { data, loading, run, refresh } = useRequest(api.getArticles, {
     defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
@@ -110,7 +110,7 @@ const Tag: React.FC = () => {
           </Space>
         </Card>
       </Space>
-      {contextHolder}
+      {contextModal}
       <TagModal
         open={modalOpen}
         record={currentRow}

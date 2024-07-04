@@ -19,5 +19,5 @@ export type FormItemType = {
 
 export type AdvancedSearchFormProps = {
   items: FormItemType[]
-  onSearch?: (values: Record<string, any>) => void
+  onSearch: (values: Record<string, any>) => void
 }
