@@ -41,10 +41,10 @@ The following is the directory structure of the entire project, which provides v
 
 - 使用 HTTP 方法（如 GET、POST、PUT 和 DELETE）来描述操作
 - 通过改变 URL 来表示不同的版本，例如 https://example.com/api/v1/resources 和 https://example.com/api/v2/resources
-- URL明确标识资源: 形式固定，可读性强，根据名词和 HTTP 动词就可以操作这些资源
+- URL明确标识资源，形式固定，可读性强，根据名词和 HTTP 动词就可以操作这些资源
 - 使用正确的 HTTP 状态码
 - 统一返回数据格式
-- API 文档: 推荐 API 管理工具 Apifox，可以一键生成 API 文档。
+- 使用 API 管理工具，比如 Apifox，可以一键生成 API 文档。
 
 ps: REST 是一种风格，而不是一种约束，过于理想的 RESTful API 会付出太多的成本哟
 
