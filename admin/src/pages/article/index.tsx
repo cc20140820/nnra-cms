@@ -20,18 +20,9 @@ import {
   useArticleMainContext,
 } from "./hooks/useArticleMain"
 import { PAGE_SIZE } from "./constant"
+import { RecordType } from "./type"
 
 const { Paragraph } = Typography
-
-type RecordType = {
-  id: string
-  author: string
-  title: string
-  categoryId: string
-  tagIds: string[]
-  content: string
-  createdAt: string
-}
 
 const Article: React.FC = () => {
   const {
@@ -122,7 +113,7 @@ const Article: React.FC = () => {
   return (
     <>
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-        {/* AdvancedSearchForm属于应用级别的业务组件，故不采用context */}
+        {/* AdvancedSearchForm属于业务组件，故不采用context */}
         <AdvancedSearchForm items={formItems} onSearch={handleSearch} />
         <Card>
           <Space direction="vertical" style={{ display: "flex" }}>

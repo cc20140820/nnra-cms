@@ -1,14 +1,10 @@
 import React, { useState } from "react"
 import { Button, Card, Col, Row, Space, Table, Divider, Modal } from "antd"
 import type { TableProps } from "antd"
-import api from "./api"
-import TagModal, { FormValuesType } from "./components/TagModal"
 import { useRequest } from "ahooks"
-
-type DataType = {
-  id: string
-  tagIds: string[]
-}
+import { TagType } from "./type"
+import TagModal from "./components/TagModal"
+import api from "./api"
 
 const PAGE_SIZE = 10
 
@@ -18,7 +14,7 @@ const Tag: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextModal] = Modal.useModal()
 
-  const { data, loading, run, refresh } = useRequest(api.getArticles, {
+  const { data, loading, run, refresh } = useRequest(api.getTags, {
     defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
     onSuccess: (_, [params]) => {
       setCurrentPage(params.current)
@@ -29,7 +25,7 @@ const Tag: React.FC = () => {
     setModalOpen(true)
   }
 
-  const handleCloseModal = async (append?: FormValuesType) => {
+  const handleCloseModal = async (append?: Pick<TagType, "name">) => {
     if (append) {
       currentRow
         ? await api.updateTag({ ...append, id: currentRow.id })
@@ -61,7 +57,7 @@ const Tag: React.FC = () => {
     run({ current, pageSize })
   }
 
-  const columns: TableProps<DataType>["columns"] = [
+  const columns: TableProps<TagType>["columns"] = [
     {
       title: "ID",
       dataIndex: "id",
@@ -90,18 +86,21 @@ const Tag: React.FC = () => {
           <Space direction="vertical" style={{ display: "flex" }}>
             <Row justify={"end"}>
               <Col>
-                <Button type="primary" onClick={handleCreate}>
-                  New
-                </Button>
+                <Space>
+                  <Button onClick={refresh}>Refresh</Button>
+                  <Button type="primary" onClick={handleCreate}>
+                    New
+                  </Button>
+                </Space>
               </Col>
             </Row>
             <Table
               rowKey={"id"}
               loading={loading}
               columns={columns}
-              dataSource={data?.data?.list}
+              dataSource={data?.list}
               pagination={{
-                total: data?.data?.total,
+                total: data?.total,
                 current: currentPage,
                 pageSize: PAGE_SIZE,
                 onChange: handlePageChange,

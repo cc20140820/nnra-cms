@@ -1,4 +1,5 @@
-import axios from "axios"
+import axios, { AxiosResponse, AxiosError } from "axios"
+import { Response } from "./type"
 import { message } from "antd"
 
 const instance = axios.create({
@@ -7,13 +8,12 @@ const instance = axios.create({
   headers: { "X-Custom-Header": "foobar" },
 })
 
-function handleResponse(response: any) {
+function handleResponse<T>(response: AxiosResponse<Response<T>>): T {
   // 2xx 范围内的状态码都会触发该函数。
-
-  return response.data
+  return response.data.data
 }
 
-function handleError(error: any) {
+function handleError(error: AxiosError) {
   // 超出 2xx 范围的状态码都会触发该函数。
   message.error(error?.message)
   return Promise.reject(error)

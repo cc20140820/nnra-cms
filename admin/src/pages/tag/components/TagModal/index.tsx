@@ -1,21 +1,12 @@
 import React from "react"
 import { Form, Input, Modal } from "antd"
-
-export type FormValuesType = {
-  name: string
-}
-
-type TagModalType = {
-  open: boolean
-  record: any
-  onClose: (append?: FormValuesType) => void
-}
+import { TagModalType, TagType } from "../../type"
 
 function TagModal(props: TagModalType) {
   const { open, record, onClose } = props
   const [form] = Form.useForm()
 
-  const onCreate = (values: FormValuesType) => {
+  const onCreate = (values: Pick<TagType, "name">) => {
     onClose(values)
   }
 
