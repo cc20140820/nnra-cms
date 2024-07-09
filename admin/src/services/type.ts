@@ -9,7 +9,7 @@ export interface Response<T> {
   errorMessage: string
 }
 
-export interface ListResponse<T> {
+export interface ListRes<T> {
   list: T[]
   current?: number
   pageSize?: number

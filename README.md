@@ -33,7 +33,26 @@ The following is the directory structure of the entire project, which provides v
 
 ### 功能记录
 
-#### 封装通用返回类型(分页数据类型etc.) todo
+#### 封装通用返回类型
+接口的返回格式建议参考统一的接口规范，方便做统一的错误处理:
+```
+interface Response<T> {
+  success: boolean
+  data: T
+  errorMessage: string
+}
+
+```
+
+分页场景采用如下的格式:
+```
+interface ListRes<T> {
+  list: T[]
+  current?: number
+  pageSize?: number
+  total?: number
+}
+```
 
 #### API 改造 & RESTful API 设计规范
 
@@ -49,3 +68,9 @@ The following is the directory structure of the entire project, which provides v
 ps: REST 是一种风格，而不是一种约束，过于理想的 RESTful API 会付出太多的成本哟
 
 #### tag 添加颜色选择
+
+#### 登录 & 鉴权
+
+#### 主题切换
+
+#### 多语言
