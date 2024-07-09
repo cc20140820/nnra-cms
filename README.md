@@ -41,7 +41,11 @@ The following is the directory structure of the entire project, which provides v
 interface Response<T> {
   success: boolean
   data: T
+  errorCode: string
   errorMessage: string
+  showType: number
+  traceId: string
+  host: string
 }
 
 ```
