@@ -1,21 +1,12 @@
 import React from "react"
 import { Form, Input, Modal } from "antd"
+import { CategoryModalType, CategoryType } from "../../type"
 
-export type FormValuesType = {
-  name: string
-}
-
-type ArticleModalType = {
-  open: boolean
-  record: any
-  onClose: (append?: FormValuesType) => void
-}
-
-function CategoryModal(props: ArticleModalType) {
+function CategoryModal(props: CategoryModalType) {
   const { open, record, onClose } = props
   const [form] = Form.useForm()
 
-  const onCreate = (values: FormValuesType) => {
+  const onCreate = (values: Pick<CategoryType, "name">) => {
     onClose(values)
   }
 

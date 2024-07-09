@@ -7,6 +7,6 @@ export type TagType = {
 
 export type TagModalType = {
   open: boolean
-  record: any
+  record: TagType | undefined
   onClose: (append?: Pick<TagType, "name">) => void
 }

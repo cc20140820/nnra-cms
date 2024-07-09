@@ -2,15 +2,7 @@ import React from "react"
 import { DatePicker, Form, Input, Modal, Radio, Select } from "antd"
 import dayjs, { Dayjs } from "dayjs"
 import { useArticleMainContext } from "../../hooks/useArticleMain"
-
-export type FormValuesType = {
-  author: string
-  title: string
-  categoryId: string
-  tags: number[]
-  createdAt: Dayjs | Date
-  content?: string
-}
+import { ArticleType } from "../../type"
 
 function ArticleModal() {
   const { modalOpen, currentRow, categoryMap, tagMap, handleCloseModal } =
@@ -18,7 +10,7 @@ function ArticleModal() {
 
   const [form] = Form.useForm()
 
-  const onCreate = (values: FormValuesType) => {
+  const onCreate = (values: ArticleType) => {
     const createdDate = values.createdAt as Dayjs
     values.createdAt = createdDate.toDate()
     handleCloseModal(values)
@@ -41,7 +33,7 @@ function ArticleModal() {
           initialValues={
             currentRow
               ? { ...currentRow, createdAt: dayjs(currentRow?.createdAt) }
-              : null
+              : undefined
           }
           onFinish={(values) => onCreate(values)}
           clearOnDestroy

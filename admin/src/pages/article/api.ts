@@ -1,15 +1,20 @@
 import ins from "@/services/instance"
+import { PageParams, ListResponse } from "@/services/type"
+import { ArticleType } from "./type"
+import { CategoryType } from "../category/type"
+import { TagType } from "../tag/type"
 
 const Api = {
-  getArticles: (params: any) => ins.post("/articles", params),
+  getArticles: (params: PageParams): Promise<ListResponse<ArticleType>> =>
+    ins.post("/articles", params),
   getArticleById: (id: string) => ins.get(`/articles/${id}`),
-  addArticle: (params: any) => ins.post(`/articles/add`, params),
+  addArticle: (params: ArticleType) => ins.post(`/articles/add`, params),
   removeArticle: (id: string) => ins.delete(`/articles/${id}`),
-  updateArticle: (params: any) => ins.patch(`/articles`, params),
+  updateArticle: (params: ArticleType) => ins.patch(`/articles`, params),
 
   // other field
-  getCategories: (params: any) => ins.get("/category", params),
-  getTags: (params: any) => ins.get("/tag", params),
+  getCategories: (): Promise<CategoryType[]> => ins.get("/category"),
+  getTags: (): Promise<TagType[]> => ins.get("/tag"),
 }
 
 export default Api

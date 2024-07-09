@@ -17,17 +17,11 @@ export class CategoryService {
   }
 
   async findAll(): Promise<any> {
-    const total = await this.categoryModel.countDocuments(); // 获取总记录数
     const list = await this.categoryModel.find().select('-__v').exec();
-
-    const data = {
-      list,
-      total,
-    };
 
     return {
       success: true,
-      data,
+      data: list,
       errorMessage: '',
     };
   }

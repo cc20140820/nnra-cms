@@ -15,17 +15,10 @@ export class TagService {
   }
 
   async findAll(): Promise<any> {
-    const total = await this.tagModel.countDocuments(); // 获取总记录数
     const list = await this.tagModel.find().select('-__v').exec();
-
-    const data = {
-      list,
-      total,
-    };
-
     return {
       success: true,
-      data,
+      data: list,
       errorMessage: '',
     };
   }

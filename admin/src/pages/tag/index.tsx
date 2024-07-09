@@ -6,20 +6,12 @@ import { TagType } from "./type"
 import TagModal from "./components/TagModal"
 import api from "./api"
 
-const PAGE_SIZE = 10
-
 const Tag: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1)
-  const [currentRow, setCurrentRow] = useState<any>(null)
+  const [currentRow, setCurrentRow] = useState<TagType | undefined>(undefined)
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextModal] = Modal.useModal()
 
-  const { data, loading, run, refresh } = useRequest(api.getTags, {
-    defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
-    onSuccess: (_, [params]) => {
-      setCurrentPage(params.current)
-    },
-  })
+  const { data, loading, refresh } = useRequest(api.getTags)
 
   const handleCreate = () => {
     setModalOpen(true)
@@ -32,7 +24,7 @@ const Tag: React.FC = () => {
         : await api.addTag(append)
       refresh()
     }
-    setCurrentRow(null)
+    setCurrentRow(undefined)
     setModalOpen(false)
   }
 
@@ -48,13 +40,9 @@ const Tag: React.FC = () => {
     return
   }
 
-  const handleEdit = (record: any) => {
+  const handleEdit = (record: TagType) => {
     setModalOpen(true)
     setCurrentRow(record)
-  }
-
-  const handlePageChange = (current: number, pageSize: number) => {
-    run({ current, pageSize })
   }
 
   const columns: TableProps<TagType>["columns"] = [
@@ -87,7 +75,7 @@ const Tag: React.FC = () => {
             <Row justify={"end"}>
               <Col>
                 <Space>
-                  <Button onClick={refresh}>Refresh</Button>
+                  <Button onClick={refresh}>Reload</Button>
                   <Button type="primary" onClick={handleCreate}>
                     New
                   </Button>
@@ -98,13 +86,7 @@ const Tag: React.FC = () => {
               rowKey={"id"}
               loading={loading}
               columns={columns}
-              dataSource={data?.list}
-              pagination={{
-                total: data?.total,
-                current: currentPage,
-                pageSize: PAGE_SIZE,
-                onChange: handlePageChange,
-              }}
+              dataSource={data}
             />
           </Space>
         </Card>

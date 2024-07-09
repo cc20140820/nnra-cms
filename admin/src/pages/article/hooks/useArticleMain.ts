@@ -4,8 +4,8 @@ import { useRequest } from "ahooks"
 import { Modal } from "antd"
 import api from "../api"
 import dayjs from "dayjs"
-import { FormValuesType } from "../components/ArticleModal"
 import { PAGE_SIZE } from "../constant"
+import { ArticleSearchType, ArticleType } from "../type"
 
 function useArticleMain() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -14,7 +14,9 @@ function useArticleMain() {
     { label: string; value: string }[]
   >([])
   const [tagMap, setTagMap] = useState<{ label: string; value: string }[]>([])
-  const [currentRow, setCurrentRow] = useState<any>(null)
+  const [currentRow, setCurrentRow] = useState<ArticleType | undefined>(
+    undefined
+  )
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextModal] = Modal.useModal()
 
@@ -27,7 +29,7 @@ function useArticleMain() {
 
   useRequest(api.getCategories, {
     onSuccess: (data) => {
-      const res = data?.data?.list.map((v: any) => ({
+      const res = data.map((v) => ({
         label: v.name,
         value: v.id,
       }))
@@ -37,7 +39,7 @@ function useArticleMain() {
 
   useRequest(api.getTags, {
     onSuccess: (data) => {
-      const res = data?.data?.list.map((v: any) => ({
+      const res = data.map((v) => ({
         label: v.name,
         value: v.id,
       }))
@@ -45,7 +47,7 @@ function useArticleMain() {
     },
   })
 
-  const handleSearch = async (values: Record<string, any>) => {
+  const handleSearch = (values: ArticleSearchType) => {
     if (Array.isArray(values.createdAt) && values.createdAt.length > 0) {
       values.createdAt = [
         dayjs(values.createdAt[0]).format("YYYY-MM-DD"),
@@ -60,14 +62,14 @@ function useArticleMain() {
     setModalOpen(true)
   }
 
-  const handleCloseModal = async (append?: FormValuesType) => {
+  const handleCloseModal = async (append?: ArticleType) => {
     if (append) {
       currentRow
         ? await api.updateArticle({ ...append, id: currentRow.id })
         : await api.addArticle(append)
       refresh()
     }
-    setCurrentRow(null)
+    setCurrentRow(undefined)
     setModalOpen(false)
   }
 
@@ -83,7 +85,7 @@ function useArticleMain() {
     return
   }
 
-  const handleEdit = (record: any) => {
+  const handleEdit = (record: ArticleType) => {
     setModalOpen(true)
     setCurrentRow(record)
   }

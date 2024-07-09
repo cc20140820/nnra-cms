@@ -1,19 +1,15 @@
 import React, { useState } from "react"
 import { Button, Card, Col, Row, Space, Table, Divider, Modal } from "antd"
 import type { TableProps } from "antd"
-import CategoryModal, { FormValuesType } from "./components/CategoryModal"
+import CategoryModal from "./components/CategoryModal"
 import { useRequest } from "ahooks"
+import { CategoryType } from "./type"
 import api from "./api"
 
-type DataType = {
-  id: string
-  tagIds: string[]
-}
-
-const PAGE_SIZE = 10
-
 const Category: React.FC = () => {
-  const [currentRow, setCurrentRow] = useState<any>(null)
+  const [currentRow, setCurrentRow] = useState<CategoryType | undefined>(
+    undefined
+  )
   const [modalOpen, setModalOpen] = useState(false)
   const [modal, contextModal] = Modal.useModal()
 
@@ -23,14 +19,14 @@ const Category: React.FC = () => {
     setModalOpen(true)
   }
 
-  const handleCloseModal = async (append?: FormValuesType) => {
+  const handleCloseModal = async (append?: Pick<CategoryType, "name">) => {
     if (append) {
       currentRow
         ? await api.updateCategory({ ...append, id: currentRow.id })
         : await api.addCategory(append)
       refresh()
     }
-    setCurrentRow(null)
+    setCurrentRow(undefined)
     setModalOpen(false)
   }
 
@@ -46,12 +42,12 @@ const Category: React.FC = () => {
     return
   }
 
-  const handleEdit = (record: any) => {
+  const handleEdit = (record: CategoryType) => {
     setModalOpen(true)
     setCurrentRow(record)
   }
 
-  const columns: TableProps<DataType>["columns"] = [
+  const columns: TableProps<CategoryType>["columns"] = [
     {
       title: "ID",
       dataIndex: "id",
@@ -80,20 +76,19 @@ const Category: React.FC = () => {
           <Space direction="vertical" style={{ display: "flex" }}>
             <Row justify={"end"}>
               <Col>
-                <Button type="primary" onClick={handleCreate}>
-                  New
-                </Button>
+                <Space>
+                  <Button onClick={refresh}>Reload</Button>
+                  <Button type="primary" onClick={handleCreate}>
+                    New
+                  </Button>
+                </Space>
               </Col>
             </Row>
             <Table
               rowKey={"id"}
               loading={loading}
               columns={columns}
-              dataSource={data?.data?.list}
-              pagination={{
-                total: data?.data?.total,
-                pageSize: PAGE_SIZE,
-              }}
+              dataSource={data}
             />
           </Space>
         </Card>

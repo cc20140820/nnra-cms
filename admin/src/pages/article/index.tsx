@@ -20,7 +20,7 @@ import {
   useArticleMainContext,
 } from "./hooks/useArticleMain"
 import { PAGE_SIZE } from "./constant"
-import { RecordType } from "./type"
+import { ArticleType } from "./type"
 
 const { Paragraph } = Typography
 
@@ -61,7 +61,7 @@ const Article: React.FC = () => {
     },
   ]
 
-  const columns: TableProps<RecordType>["columns"] = [
+  const columns: TableProps<ArticleType>["columns"] = [
     {
       title: "Author",
       dataIndex: "author",
@@ -128,9 +128,9 @@ const Article: React.FC = () => {
               rowKey={"id"}
               loading={loading}
               columns={columns}
-              dataSource={data?.data?.list}
+              dataSource={data?.list}
               pagination={{
-                total: data?.data?.total,
+                total: data?.total,
                 current: currentPage,
                 pageSize: PAGE_SIZE,
                 onChange: handlePageChange,
