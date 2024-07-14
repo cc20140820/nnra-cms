@@ -47,7 +47,6 @@ interface Response<T> {
   traceId: string
   host: string
 }
-
 ```
 
 分页场景采用如下的格式:
@@ -73,10 +72,10 @@ interface ListRes<T> {
 
 ps: REST 是一种风格，而不是一种约束，过于理想的 RESTful API 会付出太多的成本哟
 
-#### tag 添加颜色选择
+#### 文章封面
 
-#### 登录 & 鉴权
-
-#### 主题切换
+#### 主题切换 && 波纹效果
 
 #### 多语言
+
+#### 登录 & 鉴权

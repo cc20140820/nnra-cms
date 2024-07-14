@@ -1,13 +1,20 @@
 import React from "react"
-import { Form, Input, Modal } from "antd"
-import { TagModalType, TagType } from "../../type"
+import { Form, Input, Modal, ColorPicker } from "antd"
+import { TagModalType, TagModalValueType } from "../../type"
+import { Color } from "antd/es/color-picker/color"
 
 function TagModal(props: TagModalType) {
   const { open, record, onClose } = props
   const [form] = Form.useForm()
 
-  const onCreate = (values: Pick<TagType, "name">) => {
+  const onCreate = (values: TagModalValueType) => {
+    values.color = (values.color as Color).toHexString()
     onClose(values)
+  }
+
+  const initialValues = {
+    name: record?.name,
+    color: record?.color,
   }
 
   return (
@@ -24,7 +31,7 @@ function TagModal(props: TagModalType) {
           layout="vertical"
           form={form}
           name="tag_modal"
-          initialValues={record}
+          initialValues={initialValues}
           onFinish={(values) => onCreate(values)}
           clearOnDestroy
         >
@@ -34,6 +41,9 @@ function TagModal(props: TagModalType) {
     >
       <Form.Item name="name" label="Name" rules={[{ required: true }]}>
         <Input />
+      </Form.Item>
+      <Form.Item name="color" label="Color" rules={[{ required: true }]}>
+        <ColorPicker showText />
       </Form.Item>
     </Modal>
   )

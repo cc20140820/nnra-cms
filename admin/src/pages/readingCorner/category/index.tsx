@@ -49,14 +49,9 @@ const Category: React.FC = () => {
 
   const columns: TableProps<CategoryType>["columns"] = [
     {
-      title: "ID",
-      dataIndex: "id",
-      width: "30%",
-    },
-    {
       title: "Name",
       dataIndex: "name",
-      width: "30%",
+      // width: "30%",
     },
     {
       title: "Action",

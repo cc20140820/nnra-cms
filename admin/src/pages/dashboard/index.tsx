@@ -1,14 +1,27 @@
-import React from "react"
+import React, { useState } from "react"
 
-const Dashboard: React.FC = () => {
+function A() {
+  console.log(2)
+  return null
+}
+
+const App: React.FC = () => {
+  const [flag, setFlag] = useState(1111)
+  console.log(1)
   return (
     <div>
-      <img
-        src="https://static.xtransfer.com/boss/static/close-min_9bb139990c8581a1.png"
-        alt="xx"
-      />
+      <button
+        onClick={() => {
+          console.log("click")
+          setFlag(2222)
+        }}
+      >
+        click me
+      </button>
+      {/* <BtnFC /> */}
+      <A />
     </div>
   )
 }
 
-export default Dashboard
+export default App

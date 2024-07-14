@@ -17,6 +17,7 @@ import {
   Typography,
   Space,
   ConfigProvider,
+  App,
 } from "antd"
 import { useAdminStore } from "@/store"
 import styles from "./mainLayout.module.css"
@@ -29,22 +30,22 @@ type MenuItem = Required<MenuProps>["items"][number] & {
 
 const menus: MenuItem[] = [
   {
-    key: "sub1",
-    label: "Navigation One",
-    icon: <MailOutlined />,
-    children: [
-      { key: "article", label: "Article" },
-      { key: "category", label: "Category" },
-      { key: "tag", label: "Tag" },
-    ],
-  },
-  {
     key: "sub2",
-    label: "Navigation Two",
+    label: "Login center",
     icon: <AppstoreOutlined />,
     children: [
       { key: "four", label: "Option 4" },
       { key: "five", label: "Option 5" },
+    ],
+  },
+  {
+    key: "sub1",
+    label: "Reading corner",
+    icon: <MailOutlined />,
+    children: [
+      { key: "book", label: "Books" },
+      { key: "category", label: "Categories" },
+      { key: "tag", label: "Tags" },
     ],
   },
 ]
@@ -144,7 +145,9 @@ const MainLayout: React.FC = () => {
         <Layout className={styles.layoutWrap}>
           <Title level={3}>{pageName}</Title>
           <Content>
-            <Outlet />
+            <App>
+              <Outlet />
+            </App>
           </Content>
         </Layout>
       </Layout>

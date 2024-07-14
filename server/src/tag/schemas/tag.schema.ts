@@ -12,6 +12,9 @@ export class Tag extends Document {
   @Prop()
   name: string;
 
+  @Prop()
+  color: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 

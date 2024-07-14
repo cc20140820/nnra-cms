@@ -1,15 +1,15 @@
 import React, { useState } from "react"
-import { Button, Card, Col, Row, Space, Table, Divider, Modal } from "antd"
+import { Button, Card, Col, Row, Space, Table, Divider, App } from "antd"
 import type { TableProps } from "antd"
 import { useRequest } from "ahooks"
-import { TagType } from "./type"
+import { TagType, TagModalValueType } from "./type"
 import TagModal from "./components/TagModal"
 import api from "./api"
 
 const Tag: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<TagType | undefined>(undefined)
   const [modalOpen, setModalOpen] = useState(false)
-  const [modal, contextModal] = Modal.useModal()
+  const { modal } = App.useApp()
 
   const { data, loading, refresh } = useRequest(api.getTags)
 
@@ -17,7 +17,7 @@ const Tag: React.FC = () => {
     setModalOpen(true)
   }
 
-  const handleCloseModal = async (append?: Pick<TagType, "name">) => {
+  const handleCloseModal = async (append?: TagModalValueType) => {
     if (append) {
       currentRow
         ? await api.updateTag({ ...append, id: currentRow.id })
@@ -28,12 +28,12 @@ const Tag: React.FC = () => {
     setModalOpen(false)
   }
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (record: TagType) => {
     modal.confirm({
       title: "Are you sure?",
-      content: `You will delete record ${id}`,
+      content: `You will delete tag ${record?.name}`,
       onOk: async () => {
-        await api.removeTag(id)
+        await api.removeTag(record?.id)
         refresh()
       },
     })
@@ -47,21 +47,27 @@ const Tag: React.FC = () => {
 
   const columns: TableProps<TagType>["columns"] = [
     {
-      title: "ID",
-      dataIndex: "id",
-      width: "30%",
-    },
-    {
       title: "Name",
       dataIndex: "name",
       width: "30%",
+    },
+    {
+      title: "Color",
+      dataIndex: "color",
+      width: "30%",
+      render: (text) => (
+        <Space>
+          <div style={{ width: 12, height: 12, backgroundColor: text }}></div>
+          {text}
+        </Space>
+      ),
     },
     {
       title: "Action",
       render: (_, record) => (
         <Space split={<Divider type="vertical" />}>
           <a onClick={() => handleEdit(record)}>Edit</a>
-          <a onClick={() => handleDelete(record.id)}>Delete</a>
+          <a onClick={() => handleDelete(record)}>Delete</a>
         </Space>
       ),
     },
@@ -91,7 +97,6 @@ const Tag: React.FC = () => {
           </Space>
         </Card>
       </Space>
-      {contextModal}
       <TagModal
         open={modalOpen}
         record={currentRow}

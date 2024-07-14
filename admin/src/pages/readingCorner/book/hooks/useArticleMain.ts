@@ -13,7 +13,9 @@ function useArticleMain() {
   const [categoryMap, setCategoryMap] = useState<
     { label: string; value: string }[]
   >([])
-  const [tagMap, setTagMap] = useState<{ label: string; value: string }[]>([])
+  const [tagMap, setTagMap] = useState<
+    { label: string; value: string; color: string }[]
+  >([])
   const [currentRow, setCurrentRow] = useState<ArticleType | undefined>(
     undefined
   )
@@ -42,6 +44,7 @@ function useArticleMain() {
       const res = data.map((v) => ({
         label: v.name,
         value: v.id,
+        color: v.color as string,
       }))
       setTagMap(res)
     },

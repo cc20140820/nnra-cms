@@ -80,11 +80,15 @@ const Article: React.FC = () => {
       dataIndex: "tagIds",
       render: (_, { tagIds }) => (
         <>
-          {tagIds.map((tagId) => (
-            <Tag key={tagId} color={"green"}>
-              {tagMap.find((v) => v.value === tagId)?.label}
-            </Tag>
-          ))}
+          {tagIds.map((tagId) => {
+            const label = tagMap.find((v) => v.value === tagId)?.label
+            const color = tagMap.find((v) => v.value === tagId)?.color
+            return (
+              <Tag key={tagId} color={color}>
+                {label}
+              </Tag>
+            )
+          })}
         </>
       ),
     },
