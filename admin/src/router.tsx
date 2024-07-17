@@ -15,6 +15,18 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to={"/book"} /> },
       {
+        path: "/a",
+        element: <Dashboard />,
+      },
+      {
+        path: "/b",
+        element: <Dashboard />,
+      },
+      {
+        path: "/c",
+        element: <Dashboard />,
+      },
+      {
         path: "/book",
         element: <Book />,
       },
@@ -25,14 +37,6 @@ const router = createBrowserRouter([
       {
         path: "/tag",
         element: <Tag />,
-      },
-      {
-        path: "/four",
-        element: <Dashboard />,
-      },
-      {
-        path: "/five",
-        element: <Dashboard />,
       },
     ],
   },

@@ -30,16 +30,22 @@ type MenuItem = Required<MenuProps>["items"][number] & {
 
 const menus: MenuItem[] = [
   {
-    key: "sub2",
-    label: "Login center",
+    key: "sub0",
+    label: "Dashboard",
     icon: <AppstoreOutlined />,
-    children: [
-      { key: "four", label: "Option 4" },
-      { key: "five", label: "Option 5" },
-    ],
+    children: [{ key: "a", label: "Option 1" }],
   },
   {
     key: "sub1",
+    label: "Login center",
+    icon: <AppstoreOutlined />,
+    children: [
+      { key: "b", label: "Option 4" },
+      { key: "c", label: "Option 5" },
+    ],
+  },
+  {
+    key: "sub2",
     label: "Reading corner",
     icon: <MailOutlined />,
     children: [
@@ -79,18 +85,21 @@ const MainLayout: React.FC = () => {
   }
 
   useEffect(() => {
-    const key = location.pathname.replace("/", "")
+    const pathname = location.pathname.replace("/", "")
+
     const parentKey = menus.find(
-      (menu) => menu?.children.findIndex((child) => child.key === key) > -1
+      (menu) => menu?.children.findIndex((child) => child.key === pathname) > -1
     )?.key as string
+
     const pageLabel =
       menus
         .find((menu) => menu.key === parentKey)
-        ?.children.find((sub) => sub.key === key)?.label || ""
-    setSelectedKeys([key])
+        ?.children.find((sub) => sub.key === pathname)?.label || ""
+
+    setSelectedKeys([pathname])
     setOpenKeys([parentKey])
     setPageName(pageLabel)
-  }, [location])
+  }, [location.pathname])
 
   return (
     <Layout style={{ minHeight: "100%" }}>

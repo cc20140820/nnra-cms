@@ -6,6 +6,7 @@ import { RolesModule } from './roles/roles.module';
 import { ArticlesModule } from './articles/articles.module';
 import { CategoryModule } from './category/category.module';
 import { TagModule } from './tag/tag.module';
+import { BasicModule } from './basic/basic.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TagModule } from './tag/tag.module';
     MongooseModule.forRoot('mongodb://localhost:27017/nnra'),
     CategoryModule,
     TagModule,
+    BasicModule,
   ],
   controllers: [AppController],
   providers: [AppService],

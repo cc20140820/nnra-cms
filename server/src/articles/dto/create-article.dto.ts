@@ -14,4 +14,6 @@ export class CreateArticleDto {
   createdAt: Date;
 
   updatedAt: Date;
+
+  cover: string;
 }

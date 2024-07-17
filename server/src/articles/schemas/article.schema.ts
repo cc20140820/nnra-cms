@@ -29,6 +29,9 @@ export class Article extends Document {
 
   @Prop({ default: Date.now })
   updatedAt: Date;
+
+  @Prop()
+  cover: string;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

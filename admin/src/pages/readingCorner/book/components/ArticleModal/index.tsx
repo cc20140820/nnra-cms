@@ -1,8 +1,8 @@
-import React from "react"
-import { DatePicker, Form, Input, Modal, Radio, Select } from "antd"
+import { DatePicker, Form, Input, Modal, Select, Row, Col } from "antd"
 import dayjs, { Dayjs } from "dayjs"
 import { useArticleMainContext } from "../../hooks/useArticleMain"
 import { ArticleType } from "../../type"
+import AdvancedUpload from "@/components/AdvancedUpload"
 
 function ArticleModal() {
   const { modalOpen, currentRow, categoryMap, tagMap, handleCloseModal } =
@@ -22,6 +22,7 @@ function ArticleModal() {
       title="Create a new article"
       okText="Create"
       cancelText="Cancel"
+      width={"60%"}
       okButtonProps={{ autoFocus: true, htmlType: "submit" }}
       onCancel={() => handleCloseModal()}
       destroyOnClose
@@ -42,35 +43,53 @@ function ArticleModal() {
         </Form>
       )}
     >
-      <Form.Item name="author" label="Author" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="title" label="Title" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name="createdAt"
-        label="Created At"
-        rules={[{ required: true }]}
-      >
-        <DatePicker disabled={!!currentRow} style={{ width: "100%" }} />
-      </Form.Item>
-      <Form.Item
-        name="categoryId"
-        label="Category"
-        rules={[{ required: true }]}
-      >
-        <Radio.Group>
-          {categoryMap.map((v) => (
-            <Radio key={v.value} value={v.value}>
-              {v.label}
-            </Radio>
-          ))}
-        </Radio.Group>
-      </Form.Item>
-      <Form.Item name="tagIds" label="Tags" rules={[{ required: true }]}>
-        <Select mode="multiple" allowClear options={tagMap} />
-      </Form.Item>
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item name="author" label="Author" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name="title" label="Title" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item
+            name="createdAt"
+            label="Created At"
+            rules={[{ required: true }]}
+          >
+            <DatePicker disabled={!!currentRow} style={{ width: "100%" }} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name="tagIds" label="Tags" rules={[{ required: true }]}>
+            <Select mode="multiple" allowClear options={tagMap} />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Row gutter={24}>
+        <Col span={12}>
+          <Form.Item
+            name="categoryId"
+            label="Category"
+            rules={[{ required: true }]}
+          >
+            <Select allowClear options={categoryMap} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item name="cover" label="Cover" rules={[{ required: true }]}>
+            <AdvancedUpload />
+          </Form.Item>
+        </Col>
+      </Row>
+
       <Form.Item name="content" label="Content">
         <Input.TextArea autoSize={{ minRows: 4, maxRows: 6 }} />
       </Form.Item>

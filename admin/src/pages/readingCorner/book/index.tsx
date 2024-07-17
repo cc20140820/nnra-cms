@@ -31,7 +31,6 @@ const Article: React.FC = () => {
     currentPage,
     data,
     loading,
-    contextModal,
     handleSearch,
     handleCreate,
     handlePageChange,
@@ -143,7 +142,6 @@ const Article: React.FC = () => {
           </Space>
         </Card>
       </Space>
-      {contextModal}
       <ArticleModal />
     </>
   )

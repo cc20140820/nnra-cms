@@ -1,7 +1,7 @@
 import { useState } from "react"
 import constate from "constate"
 import { useRequest } from "ahooks"
-import { Modal } from "antd"
+import { App, Modal } from "antd"
 import api from "../api"
 import dayjs from "dayjs"
 import { PAGE_SIZE } from "../constant"
@@ -20,7 +20,7 @@ function useArticleMain() {
     undefined
   )
   const [modalOpen, setModalOpen] = useState(false)
-  const [modal, contextModal] = Modal.useModal()
+  const { modal } = App.useApp()
 
   const { data, loading, run, refresh } = useRequest(api.getArticles, {
     defaultParams: [{ current: 1, pageSize: PAGE_SIZE }],
@@ -102,7 +102,6 @@ function useArticleMain() {
     categoryMap,
     tagMap,
     modalOpen,
-    contextModal,
     data,
     loading,
     currentRow,
