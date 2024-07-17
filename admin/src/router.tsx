@@ -3,9 +3,9 @@ import MainLayout from "./layouts/mainLayout"
 import ErrorPage from "./pages/error"
 import Login from "./pages/loginCenter"
 import Dashboard from "./pages/dashboard"
-import Book from "./pages/readingCorner/book"
-import Category from "./pages/readingCorner/category"
-import Tag from "./pages/readingCorner/tag"
+import Books from "./pages/readingCorner/books"
+import Categories from "./pages/readingCorner/categories"
+import Tags from "./pages/readingCorner/tags"
 
 const router = createBrowserRouter([
   {
@@ -13,7 +13,7 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Navigate to={"/book"} /> },
+      { index: true, element: <Navigate to={"/books"} /> },
       {
         path: "/a",
         element: <Dashboard />,
@@ -27,16 +27,16 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "/book",
-        element: <Book />,
+        path: "/books",
+        element: <Books />,
       },
       {
-        path: "/category",
-        element: <Category />,
+        path: "/categories",
+        element: <Categories />,
       },
       {
-        path: "/tag",
-        element: <Tag />,
+        path: "/tags",
+        element: <Tags />,
       },
     ],
   },

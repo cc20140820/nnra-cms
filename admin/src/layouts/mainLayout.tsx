@@ -49,9 +49,9 @@ const menus: MenuItem[] = [
     label: "Reading corner",
     icon: <MailOutlined />,
     children: [
-      { key: "book", label: "Books" },
-      { key: "category", label: "Categories" },
-      { key: "tag", label: "Tags" },
+      { key: "books", label: "Books" },
+      { key: "categories", label: "Categories" },
+      { key: "tags", label: "Tags" },
     ],
   },
 ]

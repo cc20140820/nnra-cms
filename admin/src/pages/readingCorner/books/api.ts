@@ -1,8 +1,8 @@
 import ins from "@/services/instance"
 import { PageParams, ListRes } from "@/services/type"
 import { ArticleType } from "./type"
-import { CategoryType } from "../category/type"
-import { TagType } from "../tag/type"
+import { CategoryType } from "../categories/type"
+import { TagType } from "../tags/type"
 
 const Api = {
   getArticles: (params: PageParams): Promise<ListRes<ArticleType>> =>
