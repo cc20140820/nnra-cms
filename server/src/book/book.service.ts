@@ -1,17 +1,15 @@
 import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CreateArticleDto } from './dto/create-article.dto';
-import { UpdateArticleDto } from './dto/update-article.dto';
-import { Article, ArticleDocument } from './schemas/article.schema';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
+import { Book, BookDocument } from './schemas/book.schema';
 
 @Injectable()
-export class ArticlesService {
-  constructor(
-    @InjectModel('Article') private articleModel: Model<ArticleDocument>,
-  ) {}
+export class BookService {
+  constructor(@InjectModel('Book') private articleModel: Model<BookDocument>) {}
 
-  create(createArticleDto: CreateArticleDto): Promise<Article> {
+  create(createArticleDto: CreateBookDto): Promise<Book> {
     const createdArticle = new this.articleModel(createArticleDto);
     return createdArticle.save();
   }
@@ -72,11 +70,11 @@ export class ArticlesService {
   }
 
   // 详情
-  findOne(id: number): Promise<Article | null> {
+  findOne(id: number): Promise<Book | null> {
     return this.articleModel.findOne({ uid: id }).exec();
   }
 
-  update(updateArticleDto: UpdateArticleDto): Promise<Article | null> {
+  update(updateArticleDto: UpdateBookDto): Promise<Book | null> {
     updateArticleDto.updatedAt = new Date();
     return this.articleModel
       .findOneAndUpdate({ id: updateArticleDto.id }, updateArticleDto, {
@@ -85,7 +83,7 @@ export class ArticlesService {
       .exec();
   }
 
-  remove(id: string): Promise<Article | null> {
+  remove(id: string): Promise<Book | null> {
     return this.articleModel.findOneAndDelete({ id }).exec();
   }
 }

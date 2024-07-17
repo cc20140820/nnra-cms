@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import { v4 as uuidv4 } from 'uuid';
 
-export type ArticleDocument = Article & Document;
+export type BookDocument = Book & Document;
 
 @Schema()
-export class Article extends Document {
+export class Book extends Document {
   @Prop({ default: uuidv4 })
   id: string;
 
@@ -34,4 +34,4 @@ export class Article extends Document {
   cover: string;
 }
 
-export const ArticleSchema = SchemaFactory.createForClass(Article);
+export const BookSchema = SchemaFactory.createForClass(Book);

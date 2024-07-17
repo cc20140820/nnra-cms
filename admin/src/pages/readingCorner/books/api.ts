@@ -6,11 +6,11 @@ import { TagType } from "../tags/type"
 
 const Api = {
   getArticles: (params: PageParams): Promise<ListRes<ArticleType>> =>
-    ins.post("/articles", params),
-  getArticleById: (id: string) => ins.get(`/articles/${id}`),
-  addArticle: (params: ArticleType) => ins.post(`/articles/add`, params),
-  removeArticle: (id: string) => ins.delete(`/articles/${id}`),
-  updateArticle: (params: ArticleType) => ins.patch(`/articles`, params),
+    ins.post("/book", params),
+  getArticleById: (id: string) => ins.get(`/book/${id}`),
+  addArticle: (params: ArticleType) => ins.post(`/book/add`, params),
+  removeArticle: (id: string) => ins.delete(`/book/${id}`),
+  updateArticle: (params: ArticleType) => ins.patch(`/book`, params),
 
   // other field
   getCategories: (): Promise<CategoryType[]> => ins.get("/category"),

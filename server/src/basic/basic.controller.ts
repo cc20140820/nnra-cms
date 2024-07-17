@@ -13,7 +13,10 @@ const storage = diskStorage({
   },
   filename: function (req, file, cb) {
     const uniquePrefix = Date.now() + Math.round(Math.random() * 1e9);
-    cb(null, `${uniquePrefix}${file.originalname}`);
+    const extension = file.originalname.slice(
+      file.originalname.lastIndexOf('.'),
+    );
+    cb(null, `${uniquePrefix}${extension}`);
   },
 });
 
@@ -37,7 +40,6 @@ export class BasicController {
   )
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     const realPath = file.path.replace('public', 'static');
-    console.log('path:', realPath); // static/uploads/xxx
     return { url: realPath };
   }
 }
