@@ -13,6 +13,7 @@ import {
   TimeRangePickerProps,
 } from "antd"
 import { AdvancedSearchFormProps, FormItemType, FormTypeEnum } from "./type"
+import { HappyProvider } from "@ant-design/happy-work-theme"
 import dayjs from "dayjs"
 
 const { RangePicker } = DatePicker
@@ -83,30 +84,32 @@ const AdvancedSearchForm = (props: AdvancedSearchFormProps) => {
     >
       <Row gutter={24}>{renderItems(items)}</Row>
       <div style={{ textAlign: "right" }}>
-        <Space size="small">
-          <Button type="primary" htmlType="submit">
-            Search
-          </Button>
-          <Button
-            onClick={() => {
-              onSearch({})
-              form.resetFields()
-            }}
-          >
-            Clear
-          </Button>
-          {items.length > 6 && (
+        <HappyProvider>
+          <Space size="small">
+            <Button type="primary" htmlType="submit">
+              Search
+            </Button>
             <Button
-              type={"link"}
-              style={{ fontSize: 12 }}
               onClick={() => {
-                setExpand(!expand)
+                onSearch({})
+                form.resetFields()
               }}
             >
-              <DownOutlined rotate={expand ? 180 : 0} /> Collapse
+              Clear
             </Button>
-          )}
-        </Space>
+            {items.length > 6 && (
+              <Button
+                type={"link"}
+                style={{ fontSize: 12 }}
+                onClick={() => {
+                  setExpand(!expand)
+                }}
+              >
+                <DownOutlined rotate={expand ? 180 : 0} /> Collapse
+              </Button>
+            )}
+          </Space>
+        </HappyProvider>
       </div>
     </Form>
   )

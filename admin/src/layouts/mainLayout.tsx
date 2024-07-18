@@ -9,7 +9,6 @@ import {
 } from "@ant-design/icons"
 import type { MenuProps } from "antd"
 import {
-  Button,
   Dropdown,
   Layout,
   Menu,
@@ -18,12 +17,14 @@ import {
   Space,
   ConfigProvider,
   App,
+  Avatar,
+  Switch,
 } from "antd"
 import { useAdminStore } from "@/store"
 import styles from "./mainLayout.module.css"
 
-const { Title } = Typography
-const { Header, Content, Sider } = Layout
+const { Title, Text } = Typography
+const { Content, Sider } = Layout
 type MenuItem = Required<MenuProps>["items"][number] & {
   children: { key: string; label: string }[]
 }
@@ -31,7 +32,7 @@ type MenuItem = Required<MenuProps>["items"][number] & {
 const menus: MenuItem[] = [
   {
     key: "sub0",
-    label: "Dashboard",
+    label: "Overview",
     icon: <AppstoreOutlined />,
     children: [{ key: "a", label: "Option 1" }],
   },
@@ -57,11 +58,15 @@ const menus: MenuItem[] = [
 ]
 
 const SIDER_WIDTH = 240
-const HEADER_HEIGHT = 64
 
 const MainLayout: React.FC = () => {
   const {
-    token: { colorBgContainer },
+    token: {
+      colorBgContainer,
+      colorBorderSecondary,
+      colorTextHeading,
+      colorTextSecondary,
+    },
   } = theme.useToken()
 
   const navigate = useNavigate()
@@ -107,11 +112,34 @@ const MainLayout: React.FC = () => {
         width={SIDER_WIDTH}
         style={{
           background: colorBgContainer,
-          height: `calc(100% - ${HEADER_HEIGHT}px)`,
-          insetBlockStart: HEADER_HEIGHT,
+          height: "100vh",
         }}
         className={styles.siderMenu}
       >
+        <div
+          className={styles.logoWrap}
+          style={{ borderBottomColor: colorBorderSecondary }}
+        >
+          <img
+            style={{ height: 32, width: 32 }}
+            src={process.env.PUBLIC_URL + "/wave.svg"}
+            alt="logo"
+          />
+          <Space direction={"vertical"} size={2}>
+            <Text
+              className={styles.logoTitle}
+              style={{ color: colorTextHeading }}
+            >
+              Wave Dashboard
+            </Text>
+            <Text
+              className={styles.logoSubTitle}
+              style={{ color: colorTextSecondary }}
+            >
+              Workplace
+            </Text>
+          </Space>
+        </div>
         <Menu
           mode="inline"
           selectedKeys={selectedKeys}
@@ -120,37 +148,32 @@ const MainLayout: React.FC = () => {
           }
           openKeys={openKeys}
           onOpenChange={(_openKeys: string[]) => setOpenKeys(_openKeys)}
-          style={{ height: "100%", borderRight: 0 }}
+          style={{ borderRight: 0 }}
           items={menus}
           onClick={handleMenuClick}
         />
+        <div
+          className={styles.userWrap}
+          style={{ borderTopColor: colorBorderSecondary }}
+        >
+          <Dropdown menu={{ items: userOptions }}>
+            <Space size={12}>
+              <Avatar
+                style={{ backgroundColor: "#1677ff" }}
+                icon={<UserOutlined />}
+              />
+              <Text className={styles.userName}>Admin</Text>
+            </Space>
+          </Dropdown>
+          <Switch
+            checkedChildren={<MoonOutlined />}
+            unCheckedChildren={<SunOutlined />}
+            onChange={toggleTheme}
+            value={isDark}
+          />
+        </div>
       </Sider>
       <Layout style={{ marginInlineStart: SIDER_WIDTH }}>
-        <Header
-          style={{
-            zIndex: 0,
-            backgroundColor: "transparent",
-          }}
-        />
-        <Header className={styles?.topHeader}>
-          <div className={styles.flexCenterWrap}>
-            <img
-              style={{ height: 46 }}
-              src={process.env.PUBLIC_URL + "/wave.svg"}
-              alt="logo"
-            />
-          </div>
-          <Space direction="horizontal">
-            <Button
-              icon={isDark ? <MoonOutlined /> : <SunOutlined />}
-              shape="default"
-              onClick={toggleTheme}
-            />
-            <Dropdown menu={{ items: userOptions }} placement="bottomRight">
-              <Button icon={<UserOutlined />}>User</Button>
-            </Dropdown>
-          </Space>
-        </Header>
         <Layout className={styles.layoutWrap}>
           <Title level={3}>{pageName}</Title>
           <Content>
@@ -169,14 +192,8 @@ const EnhancedMainLayout: React.FC = () => {
   return (
     <ConfigProvider
       theme={{
-        token: {},
+        cssVar: true,
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-        components: {
-          Layout: {
-            headerBg: "rgba(255, 255, 255, 0.6)",
-            headerHeight: HEADER_HEIGHT,
-          },
-        },
       }}
     >
       <MainLayout />

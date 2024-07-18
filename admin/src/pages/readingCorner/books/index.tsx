@@ -9,6 +9,7 @@ import {
   Tag,
   Divider,
   Typography,
+  Image,
 } from "antd"
 import type { TableProps } from "antd"
 import dayjs from "dayjs"
@@ -21,6 +22,7 @@ import {
 } from "./hooks/useArticleMain"
 import { PAGE_SIZE } from "./constant"
 import { ArticleType } from "./type"
+import { STATIC_URL_PREFIX } from "@/utils/constant"
 
 const { Paragraph } = Typography
 
@@ -68,6 +70,13 @@ const Article: React.FC = () => {
     {
       title: "Title",
       dataIndex: "title",
+    },
+    {
+      title: "Cover",
+      dataIndex: "cover",
+      render: (text) => (
+        <Image width={80} src={`${STATIC_URL_PREFIX}${text}`} />
+      ),
     },
     {
       title: "Category",

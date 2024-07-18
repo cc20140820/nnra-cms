@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons"
 import { message, Upload } from "antd"
 import type { GetProp, UploadProps } from "antd"
+import { STATIC_URL_PREFIX } from "@/utils/constant"
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0]
 
@@ -9,7 +10,6 @@ type AdvancedUploadType = {
   value?: string
   onChange?: (val: string) => void
 }
-const STATIC_URL_PREFIX = "http://localhost:3000/"
 
 // const getBase64 = (img: FileType, callback: (url: string) => void) => {
 //   const reader = new FileReader()
@@ -60,7 +60,7 @@ const AdvancedUpload: React.FC<AdvancedUploadType> = (props) => {
       listType="picture-card"
       className="avatar-uploader"
       showUploadList={false}
-      action="http://localhost:3000/api/basic/upload"
+      action={`${STATIC_URL_PREFIX}api/basic/upload`}
       beforeUpload={beforeUpload}
       onChange={handleChange}
     >
