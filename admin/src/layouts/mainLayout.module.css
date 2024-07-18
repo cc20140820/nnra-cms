@@ -42,4 +42,10 @@
 
 .layoutWrap {
   padding: 0 24px 24px;
+  position: relative;
+  .bgImgWrap {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }

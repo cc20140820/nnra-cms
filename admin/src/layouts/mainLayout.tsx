@@ -21,6 +21,7 @@ import {
   Switch,
 } from "antd"
 import { useAdminStore } from "@/store"
+import bgImg from "./bgImg.svg"
 import styles from "./mainLayout.module.css"
 
 const { Title, Text } = Typography
@@ -175,12 +176,17 @@ const MainLayout: React.FC = () => {
       </Sider>
       <Layout style={{ marginInlineStart: SIDER_WIDTH }}>
         <Layout className={styles.layoutWrap}>
-          <Title level={3}>{pageName}</Title>
-          <Content>
-            <App>
-              <Outlet />
-            </App>
-          </Content>
+          <div className={styles.bgImgWrap}>
+            <img src={bgImg} alt="bg" />
+          </div>
+          <div style={{ zIndex: 1 }}>
+            <Title level={3}>{pageName}</Title>
+            <Content>
+              <App>
+                <Outlet />
+              </App>
+            </Content>
+          </div>
         </Layout>
       </Layout>
     </Layout>
