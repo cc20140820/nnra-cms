@@ -1,10 +1,22 @@
 import React, { useState } from "react"
-import { Button, Card, Col, Row, Space, Table, Divider, Modal } from "antd"
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Space,
+  Table,
+  Divider,
+  Modal,
+  Typography,
+} from "antd"
 import type { TableProps } from "antd"
 import CategoryModal from "./components/CategoryModal"
 import { useRequest } from "ahooks"
 import { CategoryType } from "./type"
 import api from "./api"
+
+const { Paragraph } = Typography
 
 const Category: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<CategoryType | undefined>(
@@ -67,6 +79,11 @@ const Category: React.FC = () => {
   return (
     <>
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+        <Paragraph type="secondary">
+          We hope you are making progress on your project! Feel free to read the
+          latest news about Strapi. We are giving our best to improve the
+          product based on your feedback.
+        </Paragraph>
         <Card>
           <Space direction="vertical" style={{ display: "flex" }}>
             <Row justify={"end"}>

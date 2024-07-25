@@ -74,4 +74,12 @@ ps: REST 是一种风格，而不是一种约束，过于理想的 RESTful API �
 
 #### 主题切换 & 多语言
 
+主题切换
+
+
+多语言
+[聊聊什么是 i18n？JavaScript 中的 i18n 基本概念](https://juejin.cn/post/7139484960859095053)
+[在 React 中使用 i18next](https://juejin.cn/post/7139855730105942030)
+
+
 #### 登录 & 鉴权

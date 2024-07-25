@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import i18n from "i18next"
 import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import {
   AppstoreOutlined,
@@ -23,11 +24,20 @@ import {
 import { useAdminStore } from "@/store"
 import bgImg from "./bgImg.svg"
 import styles from "./mainLayout.module.css"
+import zhCN from "antd/locale/zh_CN"
+import enUS from "antd/locale/en_US"
+import "dayjs/locale/zh-cn"
+import { Locale } from "antd/es/locale"
+import dayjs from "dayjs"
 
 const { Title, Text } = Typography
 const { Content, Sider } = Layout
 type MenuItem = Required<MenuProps>["items"][number] & {
   children: { key: string; label: string }[]
+}
+
+type MainLayoutType = {
+  onChangeLng: (v: string) => void
 }
 
 const menus: MenuItem[] = [
@@ -60,7 +70,8 @@ const menus: MenuItem[] = [
 
 const SIDER_WIDTH = 240
 
-const MainLayout: React.FC = () => {
+const MainLayout: React.FC<MainLayoutType> = (props) => {
+  const { onChangeLng } = props
   const {
     token: {
       colorBgContainer,
@@ -81,7 +92,21 @@ const MainLayout: React.FC = () => {
 
   const userOptions: MenuProps["items"] = [
     {
-      key: "1",
+      key: "lng",
+      label: <a>Language</a>,
+      children: [
+        {
+          key: "zh-cn",
+          label: <a onClick={() => onChangeLng("zh_cn")}>简体中文</a>,
+        },
+        {
+          key: "en",
+          label: <a onClick={() => onChangeLng("en")}>English</a>,
+        },
+      ],
+    },
+    {
+      key: "logout",
       label: <a onClick={() => navigate("/login")}>Logout</a>,
     },
   ]
@@ -194,15 +219,23 @@ const MainLayout: React.FC = () => {
 }
 
 const EnhancedMainLayout: React.FC = () => {
+  const [locale, setLocal] = useState<Locale>(enUS)
   const isDark = useAdminStore((state) => state.isDark)
+  const changeLanguage = (v: string) => {
+    setLocal(v === "en" ? enUS : zhCN)
+    dayjs.locale(v === "en" ? "en" : "zh")
+    i18n.changeLanguage(v)
+  }
+
   return (
     <ConfigProvider
+      locale={locale}
       theme={{
         cssVar: true,
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
       }}
     >
-      <MainLayout />
+      <MainLayout onChangeLng={changeLanguage} />
     </ConfigProvider>
   )
 }

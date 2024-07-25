@@ -23,10 +23,13 @@ import {
 import { PAGE_SIZE } from "./constant"
 import { ArticleType } from "./type"
 import { STATIC_URL_PREFIX } from "@/utils/constant"
+import { useTranslation } from "react-i18next"
 
 const { Paragraph } = Typography
 
 const Article: React.FC = () => {
+  const { t, i18n } = useTranslation()
+
   const {
     categoryMap,
     tagMap,
@@ -125,6 +128,7 @@ const Article: React.FC = () => {
   return (
     <>
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
+        <Paragraph type="secondary">{t("Welcome to React")}</Paragraph>
         {/* AdvancedSearchForm属于业务组件，故不采用context */}
         <AdvancedSearchForm items={formItems} onSearch={handleSearch} />
         <Card>
