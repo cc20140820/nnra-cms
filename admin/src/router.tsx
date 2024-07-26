@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom"
 import MainLayout from "./layouts/mainLayout"
 import ErrorPage from "./pages/error"
 import Login from "./pages/loginCenter"
-import Dashboard from "./pages/dashboard"
+import Dashboard from "./pages/overview/dashboard"
 import Books from "./pages/readingCorner/books"
 import Categories from "./pages/readingCorner/categories"
 import Tags from "./pages/readingCorner/tags"
@@ -13,29 +13,21 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <ErrorPage />,
     children: [
-      { index: true, element: <Navigate to={"/books"} /> },
+      { index: true, element: <Navigate to={"/dashboard"} /> },
       {
-        path: "/a",
+        path: "/dashboard",
         element: <Dashboard />,
       },
       {
-        path: "/b",
-        element: <Dashboard />,
-      },
-      {
-        path: "/c",
-        element: <Dashboard />,
-      },
-      {
-        path: "/books",
+        path: "books",
         element: <Books />,
       },
       {
-        path: "/categories",
+        path: "categories",
         element: <Categories />,
       },
       {
-        path: "/tags",
+        path: "tags",
         element: <Tags />,
       },
     ],

@@ -13,8 +13,8 @@ import {
 } from "antd"
 import type { TableProps } from "antd"
 import dayjs from "dayjs"
-import AdvancedSearchForm from "@/components/AdvancedSearchForm"
 import { FormTypeEnum } from "@/components/AdvancedSearchForm/type"
+import { BasicPageWrapper, AdvancedSearchForm } from "@/components"
 import ArticleModal from "./components/ArticleModal"
 import {
   ArticleMainProvider,
@@ -28,7 +28,7 @@ import { useTranslation } from "react-i18next"
 const { Paragraph } = Typography
 
 const Article: React.FC = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
 
   const {
     categoryMap,
@@ -126,10 +126,8 @@ const Article: React.FC = () => {
   ]
 
   return (
-    <>
+    <BasicPageWrapper title="Books" desc={t("Books_Description")}>
       <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-        <Paragraph type="secondary">{t("Welcome to React")}</Paragraph>
-        {/* AdvancedSearchForm属于业务组件，故不采用context */}
         <AdvancedSearchForm items={formItems} onSearch={handleSearch} />
         <Card>
           <Space direction="vertical" style={{ display: "flex" }}>
@@ -156,7 +154,7 @@ const Article: React.FC = () => {
         </Card>
       </Space>
       <ArticleModal />
-    </>
+    </BasicPageWrapper>
   )
 }
 

@@ -1,22 +1,11 @@
 import React, { useState } from "react"
-import {
-  Button,
-  Card,
-  Col,
-  Row,
-  Space,
-  Table,
-  Divider,
-  App,
-  Typography,
-} from "antd"
+import { Button, Card, Col, Row, Space, Table, Divider, App } from "antd"
 import type { TableProps } from "antd"
 import { useRequest } from "ahooks"
 import { TagType, TagModalValueType } from "./type"
 import TagModal from "./components/TagModal"
+import { BasicPageWrapper } from "@/components"
 import api from "./api"
-
-const { Paragraph } = Typography
 
 const Tag: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<TagType | undefined>(undefined)
@@ -86,40 +75,38 @@ const Tag: React.FC = () => {
   ]
 
   return (
-    <>
-      <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-        <Paragraph type="secondary">
-          We hope you are making progress on your project! Feel free to read the
+    <BasicPageWrapper
+      title="Tags"
+      desc="pe you are making progress on your project! Feel free to read the
           latest news about Strapi. We are giving our best to improve the
-          product based on your feedback.
-        </Paragraph>
-        <Card>
-          <Space direction="vertical" style={{ display: "flex" }}>
-            <Row justify={"end"}>
-              <Col>
-                <Space>
-                  <Button onClick={refresh}>Reload</Button>
-                  <Button type="primary" onClick={handleCreate}>
-                    New
-                  </Button>
-                </Space>
-              </Col>
-            </Row>
-            <Table
-              rowKey={"id"}
-              loading={loading}
-              columns={columns}
-              dataSource={data}
-            />
-          </Space>
-        </Card>
-      </Space>
+          product based on your feedback."
+    >
+      <Card>
+        <Space direction="vertical" style={{ display: "flex" }}>
+          <Row justify={"end"}>
+            <Col>
+              <Space>
+                <Button onClick={refresh}>Reload</Button>
+                <Button type="primary" onClick={handleCreate}>
+                  New
+                </Button>
+              </Space>
+            </Col>
+          </Row>
+          <Table
+            rowKey={"id"}
+            loading={loading}
+            columns={columns}
+            dataSource={data}
+          />
+        </Space>
+      </Card>
       <TagModal
         open={modalOpen}
         record={currentRow}
         onClose={handleCloseModal}
       />
-    </>
+    </BasicPageWrapper>
   )
 }
 

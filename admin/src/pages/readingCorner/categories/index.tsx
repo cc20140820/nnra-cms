@@ -1,22 +1,11 @@
 import React, { useState } from "react"
-import {
-  Button,
-  Card,
-  Col,
-  Row,
-  Space,
-  Table,
-  Divider,
-  Modal,
-  Typography,
-} from "antd"
+import { Button, Col, Row, Space, Table, Divider, Modal, Card } from "antd"
 import type { TableProps } from "antd"
 import CategoryModal from "./components/CategoryModal"
+import { BasicPageWrapper } from "@/components"
 import { useRequest } from "ahooks"
 import { CategoryType } from "./type"
 import api from "./api"
-
-const { Paragraph } = Typography
 
 const Category: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<CategoryType | undefined>(
@@ -63,7 +52,6 @@ const Category: React.FC = () => {
     {
       title: "Name",
       dataIndex: "name",
-      // width: "30%",
     },
     {
       title: "Action",
@@ -77,41 +65,40 @@ const Category: React.FC = () => {
   ]
 
   return (
-    <>
-      <Space direction="vertical" size="middle" style={{ display: "flex" }}>
-        <Paragraph type="secondary">
-          We hope you are making progress on your project! Feel free to read the
+    <BasicPageWrapper
+      title="Categories"
+      desc=" We hope you are making progress on your project! Feel free to read the
           latest news about Strapi. We are giving our best to improve the
-          product based on your feedback.
-        </Paragraph>
-        <Card>
-          <Space direction="vertical" style={{ display: "flex" }}>
-            <Row justify={"end"}>
-              <Col>
-                <Space>
-                  <Button onClick={refresh}>Reload</Button>
-                  <Button type="primary" onClick={handleCreate}>
-                    New
-                  </Button>
-                </Space>
-              </Col>
-            </Row>
-            <Table
-              rowKey={"id"}
-              loading={loading}
-              columns={columns}
-              dataSource={data}
-            />
-          </Space>
-        </Card>
-      </Space>
+          product based on your feedback."
+    >
+      <Card>
+        <Space direction="vertical" style={{ display: "flex" }}>
+          <Row justify={"end"}>
+            <Col>
+              <Space>
+                <Button onClick={refresh}>Reload</Button>
+                <Button type="primary" onClick={handleCreate}>
+                  New
+                </Button>
+              </Space>
+            </Col>
+          </Row>
+          <Table
+            rowKey={"id"}
+            loading={loading}
+            columns={columns}
+            dataSource={data}
+          />
+        </Space>
+      </Card>
+
       {contextModal}
       <CategoryModal
         open={modalOpen}
         record={currentRow}
         onClose={handleCloseModal}
       />
-    </>
+    </BasicPageWrapper>
   )
 }
 

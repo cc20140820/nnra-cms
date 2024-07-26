@@ -30,7 +30,7 @@ import "dayjs/locale/zh-cn"
 import { Locale } from "antd/es/locale"
 import dayjs from "dayjs"
 
-const { Title, Text } = Typography
+const { Text } = Typography
 const { Content, Sider } = Layout
 type MenuItem = Required<MenuProps>["items"][number] & {
   children: { key: string; label: string }[]
@@ -42,22 +42,22 @@ type MainLayoutType = {
 
 const menus: MenuItem[] = [
   {
-    key: "sub0",
+    key: "overview",
     label: "Overview",
     icon: <AppstoreOutlined />,
-    children: [{ key: "a", label: "Option 1" }],
+    children: [{ key: "dashboard", label: "Dashboard" }],
   },
   {
-    key: "sub1",
+    key: "login_center",
     label: "Login center",
     icon: <AppstoreOutlined />,
     children: [
-      { key: "b", label: "Option 4" },
-      { key: "c", label: "Option 5" },
+      { key: "users", label: "Users" },
+      { key: "auth", label: "Auth" },
     ],
   },
   {
-    key: "sub2",
+    key: "reading_corner",
     label: "Reading corner",
     icon: <MailOutlined />,
     children: [
@@ -85,7 +85,6 @@ const MainLayout: React.FC<MainLayoutType> = (props) => {
   let location = useLocation()
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
   const [openKeys, setOpenKeys] = useState<string[]>([])
-  const [pageName, setPageName] = useState("")
 
   const isDark = useAdminStore((state) => state.isDark)
   const toggleTheme = useAdminStore((state) => state.toggleTheme)
@@ -117,19 +116,13 @@ const MainLayout: React.FC<MainLayoutType> = (props) => {
 
   useEffect(() => {
     const pathname = location.pathname.replace("/", "")
-
     const parentKey = menus.find(
       (menu) => menu?.children.findIndex((child) => child.key === pathname) > -1
     )?.key as string
 
-    const pageLabel =
-      menus
-        .find((menu) => menu.key === parentKey)
-        ?.children.find((sub) => sub.key === pathname)?.label || ""
-
+    console.log("parentKey", parentKey)
     setSelectedKeys([pathname])
     setOpenKeys([parentKey])
-    setPageName(pageLabel)
   }, [location.pathname])
 
   return (
@@ -205,7 +198,6 @@ const MainLayout: React.FC<MainLayoutType> = (props) => {
             <img src={bgImg} alt="bg" />
           </div>
           <div style={{ zIndex: 1 }}>
-            <Title level={3}>{pageName}</Title>
             <Content>
               <App>
                 <Outlet />

@@ -2,7 +2,7 @@ import { DatePicker, Form, Input, Modal, Select, Row, Col } from "antd"
 import dayjs, { Dayjs } from "dayjs"
 import { useArticleMainContext } from "../../hooks/useArticleMain"
 import { ArticleType } from "../../type"
-import AdvancedUpload from "@/components/AdvancedUpload"
+import { AdvancedUpload } from "@/components"
 
 function ArticleModal() {
   const { modalOpen, currentRow, categoryMap, tagMap, handleCloseModal } =
