@@ -6,6 +6,8 @@ import Dashboard from "./pages/overview/dashboard"
 import Books from "./pages/readingCorner/books"
 import Categories from "./pages/readingCorner/categories"
 import Tags from "./pages/readingCorner/tags"
+import Users from "./pages/auth/users"
+import Permissions from "./pages/auth/permissions"
 
 const router = createBrowserRouter([
   {
@@ -19,15 +21,23 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "books",
+        path: "/users",
+        element: <Users />,
+      },
+      {
+        path: "/permissions",
+        element: <Permissions />,
+      },
+      {
+        path: "/books",
         element: <Books />,
       },
       {
-        path: "categories",
+        path: "/categories",
         element: <Categories />,
       },
       {
-        path: "tags",
+        path: "/tags",
         element: <Tags />,
       },
     ],

@@ -48,12 +48,12 @@ const menus: MenuItem[] = [
     children: [{ key: "dashboard", label: "Dashboard" }],
   },
   {
-    key: "login_center",
-    label: "Login center",
+    key: "auth",
+    label: "Auth",
     icon: <AppstoreOutlined />,
     children: [
       { key: "users", label: "Users" },
-      { key: "auth", label: "Auth" },
+      { key: "permissions", label: "Permissions" },
     ],
   },
   {
@@ -173,7 +173,10 @@ const MainLayout: React.FC<MainLayoutType> = (props) => {
         />
         <div
           className={styles.userWrap}
-          style={{ borderTopColor: colorBorderSecondary }}
+          style={{
+            borderTopColor: colorBorderSecondary,
+            backgroundColor: colorBgContainer,
+          }}
         >
           <Dropdown menu={{ items: userOptions }}>
             <Space size={12}>
