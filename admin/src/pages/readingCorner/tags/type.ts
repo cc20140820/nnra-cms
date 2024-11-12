@@ -1,4 +1,4 @@
-import { Color } from "antd/es/color-picker/color"
+import { Color } from "antd/es/color-picker"
 
 export type TagType = {
   id: string

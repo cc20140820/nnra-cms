@@ -1,7 +1,7 @@
 import React from "react"
 import { Form, Input, Modal, ColorPicker } from "antd"
 import { TagModalType, TagModalValueType } from "../../type"
-import { Color } from "antd/es/color-picker/color"
+import { Color } from "antd/es/color-picker"
 
 function TagModal(props: TagModalType) {
   const { open, record, onClose } = props

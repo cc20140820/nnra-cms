@@ -38,10 +38,7 @@
     "dev": "cross-env PORT=3001 craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject",
-    "scan": "node scan",
-    "pack": "node pack",
-    "translate": "node translate"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
